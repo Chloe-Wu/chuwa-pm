@@ -14,7 +14,7 @@ export const userSignUp = async (req, res) => {
       const user = new User({ email, password, admin });
       await user.save();
       // Create token
-      const payload = { user: { id: user._id, email: user.email } };
+      const payload = { user: { id: user._id, admin } };
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
@@ -38,7 +38,7 @@ export const userSignIn = async (req, res) => {
     const user = await User.findOne({ email, password });
     if (user) {
       // Create token
-      const payload = { user: { id: user._id, email: user.email } };
+      const payload = { user: { id: user._id, admin: user.admin } };
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
@@ -59,11 +59,21 @@ export const userSignIn = async (req, res) => {
 
 export const getUserCart = async (req, res) => {
   try {
-    const user = await User.findById(req.params?.id);
-    const cart = user.cart;
-    var success = true;
+    const cart = await User.findById(req.params?.id).cart;
     // Check if quantity in cart exceeds quantity in stock
+    const success = cart.reduce(async (success, productInCart) => {
+      const product = await Product.findById(productInCart._id);
+      success = success && (productInCart.quantity < product.quantity);
+      productInCart.quantity = Math.min(productInCart.quantity, product.quantity);
+      return success;
+    }, true)
+    await cart.save();
+    res.status(200).json({ success, cart });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+// export const addProduct = async (req, res) => {
+//   const product = 
+// }

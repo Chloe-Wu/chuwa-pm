@@ -62,32 +62,27 @@ export const getOneProduct = async (req, res) => {
 export const getProductList = async (req, res) => {
   try {
     // Query for the products by sort method and page number
-    const { sort_by, page, perPage } = req.query;
+    const { sort_by: sortBy, page, perPage } = req.query;
+    const skipItems = (page - 1) * perPage;
     var products;
-    switch (sort_by) {
+    const queryProducts = async (sort, skip, limit) => {
+      return await Product.find()
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .select("name price quantity imageUrl")
+        .exec();
+    };
+    switch (sortBy) {
       case "price_high":
-        products = await Product.find()
-          .sort({ price: -1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage)
-          .select("name price quantity imageUrl")
-          .exec();
+        products = await queryProducts({ price: -1 }, skipItems, perPage);
         break;
       case "price_low":
-        products = await Product.find()
-          .sort({ price: 1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage)
-          .select("name price quantity imageUrl")
-          .exec();
+        products = await queryProducts({ price: 1 }, skipItems, perPage);
         break;
       default:
-        products = await Product.find()
-          .sort({ updateTime: -1 })
-          .skip((page - 1) * perPage)
-          .limit(perPage)
-          .select("name price quantity imageUrl")
-          .exec();
+        // Sort by last_added
+        products = await queryProducts({ updateTime: -1 }, skipItems, perPage);
     }
     // Get total number of pages
     const documentCount = await Product.countDocuments();
@@ -97,34 +92,36 @@ export const getProductList = async (req, res) => {
     if (!userID) {
       return res.status(200).json({ success: true, pages, products });
     }
+
     // User is login, add cart information
-    const userCart = await User.findById(userID).cart;
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
     products = products.map((product) => {
       // If product is in cart, check if quantity is still available
-      let productInCart = userCart.some((item) => item._id === product._id);
-      if (productInCart) {
-        const productQuantity = Math.min(
-          productInCart.quantity,
-          product.quantity
-        );
+      const target = cart.find(
+        (item) => item.product.toString() === product.id
+      );
+      if (target) {
+        const productQuantity = Math.min(target.quantity, product.quantity);
         const inCart = {
-          status: productInCart.quantity === productQuantity,
+          status: target.quantity === productQuantity,
           quantity: productQuantity,
         };
         // Update quantity in cart, if product out of stock, remove from cart
         if (productQuantity === 0) {
-          userCart.splice(userCart.indexOf(productInCart), 1);
+          cart.splice(cart.indexOf(target), 1);
         } else {
-          productInCart.quantity = productQuantity;
+          target.quantity = productQuantity;
         }
-        return { ...product, inCart };
+        return { ...product._doc, inCart };
       }
-      return product;
+      return product._doc;
     });
     // Save user cart
-    await userCart.save();
+    await user.save();
     res.status(200).json({ success: true, pages, products });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };

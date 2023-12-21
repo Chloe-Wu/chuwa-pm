@@ -61,12 +61,12 @@ export const getUserCart = async (req, res) => {
   try {
     const cart = await User.findById(req.params?.id).cart;
     // Check if quantity in cart exceeds quantity in stock
-    const success = cart.reduce(async (success, productInCart) => {
-      const product = await Product.findById(productInCart._id);
-      success = success && (productInCart.quantity < product.quantity);
-      productInCart.quantity = Math.min(productInCart.quantity, product.quantity);
+    const success = cart.reduce(async (success, target) => {
+      const product = await Product.findById(target._id);
+      success = success && target.quantity < product.quantity;
+      cart.quantity = Math.min(target.quantity, product.quantity);
       return success;
-    }, true)
+    }, true);
     await cart.save();
     res.status(200).json({ success, cart });
   } catch (err) {
@@ -74,6 +74,96 @@ export const getUserCart = async (req, res) => {
   }
 };
 
-// export const addProduct = async (req, res) => {
-//   const product = 
-// }
+export const addProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params?.id);
+    // Check out of stock
+    if (product.quantity === 0) {
+      return res.status(400).json({ success: false, message: "Out of stock" });
+    }
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    // Prevent hack: check if product already exists in cart
+    if (cart && cart.some((item) => item.product.toString() === product.id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product already exists in cart" });
+    }
+    // Add product into cart
+    const target = { product: product.id, quantity: 1 };
+    const status =
+      target.quantity === product.quantity ? "Reach maximum" : "Good";
+    cart.push(target);
+    await user.save();
+    res.status(200).json({ success: true, status, quantity: target.quantity });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const increaseProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params?.id);
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    const target = cart.find((item) => item.product.toString() === product.id);
+    // Check out of stock
+    if (product.quantity === 0) {
+      cart.splice(cart.indexOf(target), 1);
+      await user.save();
+      return res.status(400).json({ success: false, message: "Out of stock" });
+    }
+    // Increase product quantity by 1
+    const newQuantity = target.quantity + 1;
+    const status =
+      newQuantity > product.quantity
+        ? "Exceed maximum"
+        : newQuantity === product.quantity
+        ? "Reach maximum"
+        : "Good";
+    target.quantity = Math.min(newQuantity, product.quantity);
+    await user.save();
+    res.status(200).json({ success: true, status, quantity: target.quantity });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const decreaseProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params?.id);
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    const target = cart.find((item) => item.product.toString() === product.id);
+    // Check out of stock
+    if (product.quantity === 0) {
+      cart.splice(cart.indexOf(target), 1);
+      await cart.save();
+      return res.status(400).json({ success: false, message: "Out of stock" });
+    }
+    // Decrease product quantity by 1
+    var newQuantity = target.quantity - 1;
+    var status = "Good";
+    if (newQuantity < 0) {
+      // Prevent hack: check if new quantity less than 0
+      return res
+        .status(400)
+        .json({ success: false, message: "Quantity less than 0" });
+    } else if (newQuantity === 0) {
+      status = "Reach 0";
+      cart.splice(cart.indexOf(target), 1);
+    } else if (newQuantity > product.quantity) {
+      status = "Exceed maximum";
+      newQuantity = product.quantity;
+    } else if (newQuantity === product.quantity) {
+      status = "Reach maximum";
+    }
+    target.quantity = newQuantity;
+    await user.save();
+    res.status(200).json({ success: true, status, quantity: target.quantity });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const checkout = async (req, res) => {};

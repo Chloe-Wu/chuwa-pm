@@ -1,4 +1,4 @@
-import cors from 'cors';
+import cors from "cors";
 import express from "express";
 import connectDB from "./db/index.js";
 import userRouter from "./routers/users.js";

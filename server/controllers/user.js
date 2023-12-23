@@ -22,7 +22,6 @@ export const userSignUp = async (req, res) => {
         success: true,
         message: "User created",
         id: user._id,
-        admin: user.admin,
         token,
       });
     }
@@ -46,7 +45,6 @@ export const userSignIn = async (req, res) => {
         success: true,
         message: "Login successful",
         id: user._id,
-        admin: user.admin,
         token,
       });
     } else {

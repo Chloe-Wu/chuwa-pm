@@ -1,10 +1,13 @@
 import { Router } from "express";
+import { userAuth } from "../authentication/auth.js";
 import {
   userSignUp,
   userSignIn,
   addProduct,
   increaseProduct,
   decreaseProduct,
+  removeProduct,
+  getUserCart,
   checkout,
 } from "../controllers/user.js";
 
@@ -14,12 +17,16 @@ userRouter.post("/login", userSignIn);
 
 userRouter.post("/signup", userSignUp);
 
-userRouter.post("/user_add_product/:id", addProduct);
+userRouter.post("/user_add_product/:id", userAuth, addProduct);
 
-userRouter.post("/user_increase_product/:id", increaseProduct);
+userRouter.post("/user_increase_product/:id", userAuth, increaseProduct);
 
-userRouter.post("/user_decrease_product/:id", decreaseProduct);
+userRouter.post("/user_decrease_product/:id", userAuth, decreaseProduct);
 
-userRouter.post("/checkout", checkout);
+userRouter.delete("/user_remove/:id", userAuth, removeProduct);
+
+userRouter.get("/user_cart", userAuth, getUserCart)
+
+userRouter.post("/user_checkout", userAuth, checkout);
 
 export default userRouter;

@@ -55,23 +55,6 @@ export const userSignIn = async (req, res) => {
   }
 };
 
-export const getUserCart = async (req, res) => {
-  try {
-    const cart = await User.findById(req.params?.id).cart;
-    // Check if quantity in cart exceeds quantity in stock
-    const success = cart.reduce(async (success, target) => {
-      const product = await Product.findById(target._id);
-      success = success && target.quantity < product.quantity;
-      cart.quantity = Math.min(target.quantity, product.quantity);
-      return success;
-    }, true);
-    await cart.save();
-    res.status(200).json({ success, cart });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-};
-
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params?.id);
@@ -88,7 +71,7 @@ export const addProduct = async (req, res) => {
         .json({ success: false, message: "Product already exists in cart" });
     }
     // Add product into cart
-    const target = { product: product.id, quantity: 1 };
+    const target = { product: product.id, quantity: 1, price: product.price };
     const status =
       target.quantity === product.quantity ? "Reach maximum" : "Good";
     cart.push(target);
@@ -164,4 +147,66 @@ export const decreaseProduct = async (req, res) => {
   }
 };
 
-export const checkout = async (req, res) => {};
+export const removeProduct = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    const target = cart.find(
+      (item) => item.product.toString() === req.params?.id
+    );
+    if (target) {
+      cart.splice(cart.indexOf(target), 1);
+    }
+    await user.save();
+    res.status(200).json({ success: true, message: "Remove from cart" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const getUserCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    // Check if quantity in cart exceeds quantity in stock
+    const valid = await Promise.all(cart.map(async (target) => {
+      const product = await Product.findById(target.product);
+      const isValid = target.quantity <= product.quantity;
+      target.quantity = Math.min(target.quantity, product.quantity);
+      return isValid;
+    }));
+    const success = valid.every((isValid) => isValid);
+    await user.save();
+    res.status(200).json({ success, cart });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const checkout = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    // Check if quantity in cart exceeds quantity in stock
+    const valid = await Promise.all(cart.map(async (target) => {
+      const product = await Product.findById(target.product);
+      const isValid = target.quantity <= product.quantity;
+      target.quantity = Math.min(target.quantity, product.quantity);
+      return isValid;
+    }));
+    const success = valid.every((isValid) => isValid);
+    // If nothing goes wrong, checkout
+    if (success) {
+      cart.forEach(async (target) => {
+        const product = await Product.findById(target.product);
+        product.quantity = product.quantity - target.quantity;
+        await product.save();
+      });
+      user.cart = [];
+    }
+    await user.save();
+    res.status(200).json({ success, cart: user.cart });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};

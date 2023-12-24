@@ -1,4 +1,4 @@
-.container{
+.logcontainer{
     width: 100%;
     height: 100vh;
     position: relative;
@@ -38,9 +38,8 @@
     align-items: flex-start;
 
 }
-input{
+.logcontainer input{
     width: 100%;
-    background: white;
     border-radius: 4px;
     border: 1px #CCCCCC solid;
     height: 56px;
@@ -67,7 +66,8 @@ label{
     gap: 10;
     display: 'inline-flex';
 }
-.submitBtn{
+
+.submitBtn input{
     width: 100%;
     height: 56px;
     color:white;
@@ -76,7 +76,7 @@ label{
     font-weight: '600';
     line-height: 21px;
     word-wrap: 'break-word';
-    background: #5048E5;
+    background-color: #5048E5;
     border-radius: 4px;
     justify-content: center;
     align-items: center;
@@ -86,14 +86,23 @@ label{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     font-size: 14px;
 }
-.underlineBtn{
+.bottomLeftArea{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.bottomArea input[type="button"]{
     text-decoration: underline;
     color: #5048E5;
     font-weight: 500;
     border: none;
-    width:auto;
+    width:fit-content;
+    background-color: white;
+
 }
 .clearIconBox{
     position: absolute;
@@ -103,4 +112,12 @@ label{
 .clearIcon{
     width: 20px;
     height: 20px;
+}
+.adminBox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.adminBox input[type="checkbox"]{
+    width:20px;
 }

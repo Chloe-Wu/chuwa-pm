@@ -48,7 +48,7 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className={styles.page}>
+    <div className={styles.cppage}>
       <div className={styles.container}>
         <h1 className={styles.title}>Create Product</h1>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -114,8 +114,8 @@ const CreateProduct = () => {
               <img src={proImg} />
             </div>
           </div>
-          <div>
-            <input type="submit" value="Add Product" className={styles.btn} />
+          <div className={styles.btn} >
+            <input type="submit" value="Add Product"/>
           </div>
         </form>
       </div>

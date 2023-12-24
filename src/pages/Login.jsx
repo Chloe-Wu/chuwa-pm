@@ -3,8 +3,8 @@ import AuthForm from "../components/AuthForm";
 
 const Login = () => {
   const handleAuthSubmit = async (formData) => {
-    const { scenario, email, password } = formData;
-    // console.log(scenario, email, password);
+    const { scenario, email, password, admin } = formData;
+    console.log(scenario, email, password, admin);
 
     // fetch data
     try {

@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
-import styles from "../scripts/loginForm.module.css"
+import styles from "../scripts/loginForm.module.css";
 import clearIcon from "../assets/clear.svg";
 import { useState } from "react";
 
 const AuthForm = ({ onAuthSubmit }) => {
-
   const [scenario, setScenario] = useState("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [admin, setAdmin] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onAuthSubmit({scenario,email,password})
+    onAuthSubmit({ scenario, email, password, admin });
   };
 
   const switchScenario = (newScenario) => {
@@ -20,7 +20,7 @@ const AuthForm = ({ onAuthSubmit }) => {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.logcontainer}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.clearIconBox}>
             <a href="https://react.dev" target="_blank">
@@ -52,15 +52,25 @@ const AuthForm = ({ onAuthSubmit }) => {
                   required
                 />
               </div>
-              <div>
+              <div className={styles.adminBox}>
+                <label htmlFor="admin">Administrator:</label>
+                <input
+                  id="admin"
+                  type="checkbox"
+                  value={admin}
+                  name="admin"
+                  onChange={(e) => setAdmin(e.target.checked)}
+                />
+              </div>
+              <div className={styles.submitBtn}>
                 <input
                   type="submit"
-                  className={styles.submitBtn}
+        
                   value="Create account"
                 />
               </div>
               <div className={styles.bottomArea}>
-                <div>
+                <div className={styles.bottomLeftArea}>
                   <span>Already have an account</span>
                   <input
                     type="button"
@@ -68,7 +78,7 @@ const AuthForm = ({ onAuthSubmit }) => {
                     onClick={() => switchScenario("login")}
                     value="login"
                   />
-                </div>
+                  </div>
               </div>
             </>
           )}
@@ -98,10 +108,9 @@ const AuthForm = ({ onAuthSubmit }) => {
                   required
                 />
               </div>
-              <div>
+              <div className={styles.submitBtn}>
                 <input
                   type="submit"
-                  className={styles.submitBtn}
                   value="login"
                 />
               </div>
@@ -139,10 +148,9 @@ const AuthForm = ({ onAuthSubmit }) => {
                   required
                 />
               </div>
-              <div>
+              <div className={styles.submitBtn}>
                 <input
                   type="submit"
-                  className={styles.submitBtn}
                   value="Update password"
                   onClick={() => switchScenario("sent-email")}
                 />

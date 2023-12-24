@@ -26,14 +26,16 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const product = new Product(req.params?.id);
-    // Update product information & date
+    const product = await Product.findById(req.params?.id);
+    // Update name & verify name existence
     product.name = req.body.name ?? product.name;
-    // Check name existence
-    const existingProdcut = await Product.find({ name: product.name });
-    existingProdcut.forEach(({ id }) => {
-      console.log(id);
-    });
+    const existingProdcut = await Product.findOne({ name: product.name });
+    if (existingProdcut && existingProdcut._id.toString() !== req.params?.id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product already exists" });
+    }
+    // Update rest information
     product.description = req.body.description ?? product.description;
     product.category = req.body.category ?? product.category;
     product.price = req.body.price ?? product.price;
@@ -41,7 +43,7 @@ export const updateProduct = async (req, res) => {
     product.imageUrl = req.body.imageUrl ?? product.imageUrl;
     product.updateTime = Date.now();
     // Save changes
-    // await product.save();
+    await product.save();
     res.status(200).json({ success: true, message: "Product updated" });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
@@ -50,19 +52,76 @@ export const updateProduct = async (req, res) => {
 
 export const getOneProduct = async (req, res) => {
   try {
-    const product = new Product(req.params?.id);
+    const product = await Product.findById(req.params?.id);
     res.status(200).json({ success: true, product });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 
-// export const getProductList = async (req, res) => {
-//   try {
-//     const { ref, page, perpage } = req.query;
+export const getProductList = async (req, res) => {
+  try {
+    // Query for the products by sort method and page number
+    const { sort_by: sortBy, page, perPage } = req.query;
+    const skipItems = (page - 1) * perPage;
+    var products;
+    const queryProducts = async (sort, skip, limit) => {
+      return await Product.find()
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .select("name price quantity imageUrl")
+        .exec();
+    };
+    switch (sortBy) {
+      case "price_high":
+        products = await queryProducts({ price: -1 }, skipItems, perPage);
+        break;
+      case "price_low":
+        products = await queryProducts({ price: 1 }, skipItems, perPage);
+        break;
+      default:
+        // Sort by last_added
+        products = await queryProducts({ updateTime: -1 }, skipItems, perPage);
+    }
+    // Get total number of pages
+    const documentCount = await Product.countDocuments();
+    const pages = Math.max(Math.ceil(documentCount / perPage), 1);
+    // Not login, return products
+    const { userID } = req.body;
+    if (!userID) {
+      return res.status(200).json({ success: true, pages, products });
+    }
 
-//     res.status(200).json({ success: true, products });
-//   } catch (err) {
-//     res.status(500).json({ success: false, message: 'Server Error' })
-//   }
-// }
+    // User is login, add cart information
+    const user = await User.findById(req.body.userID);
+    const cart = user.cart;
+    products = products.map((product) => {
+      // If product is in cart, check if quantity is still available
+      const target = cart.find(
+        (item) => item.product.toString() === product.id
+      );
+      if (target) {
+        const productQuantity = Math.min(target.quantity, product.quantity);
+        const inCart = {
+          status: target.quantity === productQuantity,
+          quantity: productQuantity,
+        };
+        // Update quantity in cart, if product out of stock, remove from cart
+        if (productQuantity === 0) {
+          cart.splice(cart.indexOf(target), 1);
+        } else {
+          target.quantity = productQuantity;
+        }
+        return { ...product._doc, inCart };
+      }
+      return product._doc;
+    });
+    // Save user cart
+    await user.save();
+    res.status(200).json({ success: true, pages, products });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};

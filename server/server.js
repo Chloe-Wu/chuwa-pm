@@ -1,25 +1,21 @@
+import cors from "cors";
 import express from "express";
-import pkg from "body-parser";
 import connectDB from "./db/index.js";
-import { userSignUp, userSignIn } from "./controllers/user.js";
-import { createProduct } from "./controllers/product.js";
+import userRouter from "./routers/users.js";
+import productRouter from "./routers/products.js";
 import {} from "dotenv/config";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(pkg.json());
-
 // Connect to MongoDB
 connectDB();
 
-// Login endpoint
-app.post("/api/login", userSignIn);
+app.use(cors());
+app.use(express.json());
 
-// Signup endpoint
-app.post("/api/signup", userSignUp);
-
-app.post("/api/add_product", createProduct);
+app.use("/api", userRouter);
+app.use("/api", productRouter);
 
 // Other CRUD endpoints...
 

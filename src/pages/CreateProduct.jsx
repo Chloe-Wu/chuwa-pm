@@ -1,6 +1,7 @@
 import styles from "../scripts/createProduct.module.css";
 import { useState } from "react";
 import defaultImg from "../assets/defaultImg.jpg";
+import axios from "axios";
 
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
@@ -10,37 +11,30 @@ const CreateProduct = () => {
   const [stock, setStock] = useState(0);
   const [proImg, setProImg] = useState(defaultImg);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    const formData = {
-        productName,
-        productDes,
-        category,
-        price,
-        stock,
-        proImg,
-      };
+    console.log(productName, productDes,category,price,stock,proImg,Date.now());
 
-      try{
-        const response = await fetch("/api/add_product/",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-            },
-            body:JSON.stringify(formData),
-        });
-
-        if(response.ok){
-            console.log("Product added!")
-        }
-        else{
-            console.log("failed to send product data!")
-        }
-      }
-      catch(error){
-        console.log("Error: ",error);
-      }
+    // fetch data
+    try {
+        const response = await axios.post(
+          `http://localhost:3000/api/create_product`,
+          {
+            productName,
+            productDes,
+            category,
+            price,
+            stock,
+            proImg,
+            updateTime:Date.now()
+          }
+        );
+        // const { id, token } = response.data;
+    }
+     catch (error) {
+      console.error(`Error during create product`, error.message);
+    }
   };
 
   const handleImgChange = async (e) => {

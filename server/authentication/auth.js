@@ -14,14 +14,11 @@ export const userAuth = async (req, res, next) => {
 export const loginAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.replace("Bearer ", "");
-    if (!token) {
-      return next();
-    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.body.userID = decoded.user.id;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Authentification Failed" });
+    next();
   }
 };
 

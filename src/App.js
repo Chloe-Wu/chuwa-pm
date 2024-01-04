@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import  Login from "./pages/Login.jsx"
 import CreateProduct from './pages/CreateProduct.jsx';
+import ProductListPage from './pages/ProductList.jsx';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/createProduct" element={<CreateProduct />} />
+          <Route path="/products" element={<ProductListPage />} />
       </Routes>
     </Router>
     // <div className="App">

@@ -55,6 +55,7 @@ export const getOneProduct = async (req, res) => {
     const product = await Product.findById(req.params?.id);
     // If user login and product in user cart, show cart quantity
     const { userID } = req.body;
+    const login = userID ? true : false;
     if (userID) {
       const user = await User.findById(userID);
       const cart = user.cart;
@@ -75,10 +76,10 @@ export const getOneProduct = async (req, res) => {
           target.quantity = productQuantity;
         }
         await user.save();
-        return res.status(200).json({ success: true, product, inCart });
+        return res.status(200).json({ success: true, product, inCart, login });
       }
     }
-    res.status(200).json({ success: true, product });
+    res.status(200).json({ success: true, product, login });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -114,8 +115,9 @@ export const getProductList = async (req, res) => {
     const pages = Math.max(Math.ceil(documentCount / perPage), 1);
     // Not login, return products
     const { userID } = req.body;
+    const login = userID ? true : false;
     if (!userID) {
-      return res.status(200).json({ success: true, pages, products });
+      return res.status(200).json({ success: true, pages, products, login});
     }
 
     // User is login, add cart information
@@ -144,7 +146,7 @@ export const getProductList = async (req, res) => {
     });
     // Save user cart
     await user.save();
-    res.status(200).json({ success: true, pages, products });
+    res.status(200).json({ success: true, pages, products, login });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Server Error" });

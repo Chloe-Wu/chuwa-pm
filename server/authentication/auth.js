@@ -18,6 +18,7 @@ export const loginAuth = async (req, res, next) => {
     req.body.userID = decoded.user.id;
     next();
   } catch (err) {
+    req.body.userID = undefined;
     next();
   }
 };

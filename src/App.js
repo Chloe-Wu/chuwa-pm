@@ -6,6 +6,7 @@ import CreateProduct from './pages/CreateProduct.jsx';
 import ManageProduct from './pages/ManageProduct.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
 import ProductInList from './pages/ProductInList.jsx';
+import { AuthProvider } from './AuthContext';
 
 
 import { ChakraProvider, extendBaseTheme, theme as chakraTheme } from '@chakra-ui/react'
@@ -31,14 +32,16 @@ function App() {
   return (
     <Router>
       <ChakraProvider theme={theme}>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/createProduct" element={<CreateProduct />} />
-          <Route path="/manage-product" element={<ManageProduct />} />
-          <Route path="/product-detail" element={<ProductDetail />} />
-          <Route path="/product-in-list" element={<ProductInList />} />
-          {/* <Route path="/user-cart" element={<UserCart />} /> */}
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/createProduct" element={<CreateProduct />} />
+            <Route path="/manage-product" element={<ManageProduct />} />
+            <Route path="/product-detail" element={<ProductDetail />} />
+            <Route path="/product-in-list" element={<ProductInList />} />
+            {/* <Route path="/user-cart" element={<UserCart />} /> */}
+          </Routes>
+        </AuthProvider>
       </ChakraProvider>
     </ Router>
     // <div className="App">

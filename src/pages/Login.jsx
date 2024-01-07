@@ -1,7 +1,10 @@
 import axios from "axios";
 import AuthForm from "../components/AuthForm";
+import { useAuth } from '../AuthContext';
 
 const Login = () => {
+  const { addToken } = useAuth();
+
   const handleAuthSubmit = async (formData) => {
     const { scenario, email, password } = formData;
     // console.log(scenario, email, password);
@@ -18,7 +21,8 @@ const Login = () => {
         const { id, token } = response.data;
         console.log(id);
         console.log(token);
-        console.log(response.data)
+        console.log(response.data);
+        addToken(token);
 
         // const data = await response.json();
 

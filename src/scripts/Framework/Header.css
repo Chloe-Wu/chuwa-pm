@@ -135,5 +135,6 @@
     text-align: center;
     white-space: nowrap;
     width: fit-content;
+    cursor: pointer;
   }
   

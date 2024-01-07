@@ -5,10 +5,20 @@ import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { Search2Icon } from '@chakra-ui/icons'
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
 
 
 function Header() {
+  const { token, addToken, removeToken } = useAuth();
   const navigate = useNavigate();
+
+  const handleSign = () => {
+    if (token !== null) {
+      removeToken();
+    } else {
+      navigate('/');
+    }
+  }
 
   const intoCart = () => {
     navigate('/user-cart');
@@ -69,10 +79,10 @@ function Header() {
       <div className="div-2">
         <div className="div-3">
           {/* <img className="img" alt="Carbon user" src={carbonUser} /> */}
-          <div className="text-wrapper-2">sign out</div>
+          <div className="text-wrapper-2" onClick={handleSign}>{token !== null ? "Sign out" : "Sign In"}</div>
         </div>
         <div className="div-3" onClick={intoCart}>
-          <div className="text-wrapper-2">{calculatePrice()}</div>
+          <div className="text-wrapper-2">{token !== null ? calculatePrice() : ""}</div>
         </div>
       </div>
     </div>

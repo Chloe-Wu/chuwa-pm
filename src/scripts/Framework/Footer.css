@@ -1,0 +1,81 @@
+.footer {
+    background-color: #111827;
+    height: 85px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .footer .candleaf-all {
+    color: #ffffff;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    left: 5vw;
+    line-height: 10px;
+    position: relative;
+    width: 300px;
+    margin-right: 50px;
+  }
+  
+  .footer .icon-image-container {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .icon-image-container .social-icons {
+    position: relative;
+    width: 100%;
+    height: 100%; 
+    top:0;
+    left:0;
+    z-index: 2;
+  }
+  
+  
+  .footer .group {
+    height: 24px;
+    position: relative;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+  }
+  
+  .footer .text-wrapper {
+    color: #ffffff;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 500;
+    left: 0;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content
+  }
+  
+  .footer .div {
+    color: #ffffff;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+  }
+  
+  .footer .candleaf-all-2 {
+    color: #ffffff;
+    font-family: "Inter-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+    margin-right: 5vw;
+  }
+  

@@ -9,9 +9,9 @@ import {
 
 const productRouter = Router();
 
-productRouter.get("/product/:id", getOneProduct);
-
 productRouter.get("/products", loginAuth, getProductList);
+
+productRouter.get("/product/:id", loginAuth, getOneProduct);
 
 productRouter.post("/create_product", adminAuth, createProduct);
 

@@ -2,6 +2,32 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 
+export const getUserProps = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    const table = {
+      email: user.email,
+      password: user.password,
+      admin: user.admin,
+      cart: user.cart,
+    };
+    console.log("Returning a user table");
+    res.status(201).json({ success: true, message: "User props getting", table});
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
+
+export const getUserIsAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    console.log("Returning if a user is admin");
+    res.status(201).json({ success: true, message: "User admin getting", admin: user.admin});
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
+
 export const userSignUp = async (req, res) => {
   try {
     const { email, password, admin } = req.body;
@@ -55,6 +81,7 @@ export const userSignIn = async (req, res) => {
   }
 };
 
+
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params?.id);
@@ -104,7 +131,7 @@ export const increaseProduct = async (req, res) => {
         : "Good";
     target.quantity = Math.min(newQuantity, product.quantity);
     await user.save();
-    res.status(200).json({ success: true, status, quantity: target.quantity });
+    res.status(200).json({ success: true, status, quantity: target.quantity});
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -168,16 +195,18 @@ export const getUserCart = async (req, res) => {
   try {
     const user = await User.findById(req.body.userID);
     const cart = user.cart;
+    const hash_table = new Map();
     // Check if quantity in cart exceeds quantity in stock
     const valid = await Promise.all(cart.map(async (target) => {
       const product = await Product.findById(target.product);
+      hash_table.set(product.id, product.price);
       const isValid = target.quantity <= product.quantity;
       target.quantity = Math.min(target.quantity, product.quantity);
       return isValid;
     }));
     const success = valid.every((isValid) => isValid);
     await user.save();
-    res.status(200).json({ success, cart });
+    res.status(200).json({ success, cart, hash_table });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }

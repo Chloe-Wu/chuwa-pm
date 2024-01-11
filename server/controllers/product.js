@@ -53,7 +53,33 @@ export const updateProduct = async (req, res) => {
 export const getOneProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params?.id);
-    res.status(200).json({ success: true, product });
+    // If user login and product in user cart, show cart quantity
+    const { userID } = req.body;
+    const login = userID ? true : false;
+    if (userID) {
+      const user = await User.findById(userID);
+      const cart = user.cart;
+      const target = cart.find(
+        (item) => item.product.toString() === product.id
+      );
+      // Check for cart quantity and stock quantity
+      if (target) {
+        const productQuantity = Math.min(target.quantity, product.quantity);
+        const inCart = {
+          status: target.quantity === productQuantity,
+          quantity: productQuantity,
+        };
+        // Update quantity in cart, if product out of stock, remove from cart
+        if (productQuantity === 0) {
+          cart.splice(cart.indexOf(target), 1);
+        } else {
+          target.quantity = productQuantity;
+        }
+        await user.save();
+        return res.status(200).json({ success: true, product, inCart, login });
+      }
+    }
+    res.status(200).json({ success: true, product, login });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -89,12 +115,13 @@ export const getProductList = async (req, res) => {
     const pages = Math.max(Math.ceil(documentCount / perPage), 1);
     // Not login, return products
     const { userID } = req.body;
+    const login = userID ? true : false;
     if (!userID) {
-      return res.status(200).json({ success: true, pages, products });
+      return res.status(200).json({ success: true, pages, products, login});
     }
 
     // User is login, add cart information
-    const user = await User.findById(req.body.userID);
+    const user = await User.findById(userID);
     const cart = user.cart;
     products = products.map((product) => {
       // If product is in cart, check if quantity is still available
@@ -119,7 +146,7 @@ export const getProductList = async (req, res) => {
     });
     // Save user cart
     await user.save();
-    res.status(200).json({ success: true, pages, products });
+    res.status(200).json({ success: true, pages, products, login });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Server Error" });

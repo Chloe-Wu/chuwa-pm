@@ -8,7 +8,6 @@ const userSchema = new Schema({
     {
       product: Schema.Types.ObjectId,
       quantity: Number,
-      price: Number,
     },
   ],
 });

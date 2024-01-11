@@ -71,7 +71,7 @@ export const addProduct = async (req, res) => {
         .json({ success: false, message: "Product already exists in cart" });
     }
     // Add product into cart
-    const target = { product: product.id, quantity: 1, price: product.price };
+    const target = { product: product.id, quantity: 1 };
     const status =
       target.quantity === product.quantity ? "Reach maximum" : "Good";
     cart.push(target);

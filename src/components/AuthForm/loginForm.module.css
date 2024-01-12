@@ -43,6 +43,10 @@
     border-radius: 4px;
     border: 1px #CCCCCC solid;
     height: 56px;
+    padding-left: 10px;
+}
+input[type="email"]{
+    box-sizing: border-box;
 }
 label{
     line-height: 24px;
@@ -67,7 +71,7 @@ label{
     display: 'inline-flex';
 }
 
-.submitBtn input{
+.submitBtn{
     width: 100%;
     height: 56px;
     color:white;
@@ -94,6 +98,7 @@ label{
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    gap:5px;
 }
 .bottomArea input[type="button"]{
     text-decoration: underline;
@@ -115,9 +120,30 @@ label{
 }
 .adminBox{
     display: flex;
-    flex-direction: row;
-    align-items: center;
 }
-.adminBox input[type="checkbox"]{
+input[type="checkbox"]{
     width:20px;
+    height:20px;
+}
+.passwordField{
+    position: relative;
+    width: 100%;
+}
+.passwordInput{
+    width: 100%;
+    box-sizing: border-box;
+}
+.showPasswordIcon{
+    position: absolute;
+    right:10px;
+    top:30%;
+
+}
+/* Mobile-friendly styles */
+@media only screen and (max-width: 768px) {
+    .form {
+        margin:10px;
+        padding: 24px;
+    }
+
 }

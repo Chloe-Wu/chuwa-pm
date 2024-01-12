@@ -81,7 +81,6 @@ export const userSignIn = async (req, res) => {
   }
 };
 
-
 export const addProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params?.id);
@@ -98,7 +97,7 @@ export const addProduct = async (req, res) => {
         .json({ success: false, message: "Product already exists in cart" });
     }
     // Add product into cart
-    const target = { product: product.id, quantity: 1, price: product.price };
+    const target = { product: product.id, quantity: 1 };
     const status =
       target.quantity === product.quantity ? "Reach maximum" : "Good";
     cart.push(target);
@@ -131,7 +130,7 @@ export const increaseProduct = async (req, res) => {
         : "Good";
     target.quantity = Math.min(newQuantity, product.quantity);
     await user.save();
-    res.status(200).json({ success: true, status, quantity: target.quantity});
+    res.status(200).json({ success: true, status, quantity: target.quantity });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -195,18 +194,25 @@ export const getUserCart = async (req, res) => {
   try {
     const user = await User.findById(req.body.userID);
     const cart = user.cart;
-    const hash_table = new Map();
     // Check if quantity in cart exceeds quantity in stock
-    const valid = await Promise.all(cart.map(async (target) => {
-      const product = await Product.findById(target.product);
-      hash_table.set(product.id, product.price);
-      const isValid = target.quantity <= product.quantity;
-      target.quantity = Math.min(target.quantity, product.quantity);
-      return isValid;
-    }));
+    const valid = await Promise.all(
+      cart.map(async (target) => {
+        const product = await Product.findById(target.product);
+        const isValid =
+          target.quantity <= product.quantity && product.quantity > 0;
+        target.quantity = Math.min(target.quantity, product.quantity);
+        return isValid;
+      })
+    );
     const success = valid.every((isValid) => isValid);
+    // Remove products that are out of stock
+    if (!success) {
+      user.cart = cart.filter((product) => {
+        return product.quantity > 0;
+      });
+    }
     await user.save();
-    res.status(200).json({ success, cart, hash_table });
+    res.status(200).json({ success, cart: user.cart });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
@@ -217,12 +223,15 @@ export const checkout = async (req, res) => {
     const user = await User.findById(req.body.userID);
     const cart = user.cart;
     // Check if quantity in cart exceeds quantity in stock
-    const valid = await Promise.all(cart.map(async (target) => {
-      const product = await Product.findById(target.product);
-      const isValid = target.quantity <= product.quantity;
-      target.quantity = Math.min(target.quantity, product.quantity);
-      return isValid;
-    }));
+    const valid = await Promise.all(
+      cart.map(async (target) => {
+        const product = await Product.findById(target.product);
+        const isValid =
+          target.quantity <= product.quantity && product.quantity > 0;
+        target.quantity = Math.min(target.quantity, product.quantity);
+        return isValid;
+      })
+    );
     const success = valid.every((isValid) => isValid);
     // If nothing goes wrong, checkout
     if (success) {
@@ -232,6 +241,11 @@ export const checkout = async (req, res) => {
         await product.save();
       });
       user.cart = [];
+    } else {
+      // Remove products that are out of stock
+      user.cart = cart.filter((product) => {
+        return product.quantity > 0;
+      });
     }
     await user.save();
     res.status(200).json({ success, cart: user.cart });

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../scripts/ManageProductPage.css';
-import { Select, InputLabel, FormControl, MenuItem, Button, ButtonGroup } from '@chakra-ui/react';
-import User from "../controllers/user.js";
-import Product from "../controllers/product.js";
+import { Select, FormControl, MenuItem, Button, ButtonGroup } from '@chakra-ui/react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
@@ -139,7 +137,6 @@ function ManageProductPage() {
                     <div className="product-category">
                         <h5 className="product-category-title">Category</h5>
                         <FormControl className="product-category-input"  fullWidth>
-                            <InputLabel id="category-select-label">Category</InputLabel>
                             <Select
                                 labelId="category-select-label"
                                 id="category-select"

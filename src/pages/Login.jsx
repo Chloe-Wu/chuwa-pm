@@ -1,9 +1,14 @@
 import axios from "axios";
 import AuthForm from "../components/AuthForm";
-import { useAuth } from '../AuthContext';
+import { useSelector, useDispatch } from "react-redux";
+import { addToken, removeToken, addId, removeId } from "../TokenSlice.jsx";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { addToken } = useAuth();
+  const user_id = useSelector((state) => state.info.id);
+  const user_token = useSelector((state) => state.info.token);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAuthSubmit = async (formData) => {
     const { scenario, email, password } = formData;
@@ -13,7 +18,7 @@ const Login = () => {
     try {
       if (scenario === "login" || scenario === "signup") {
         const response = await axios.post(
-          `http://localhost:3000/api/${scenario}`,
+          `/api/${scenario}`,
           scenario === "login"
             ? { email, password }
             : { email, password, admin: formData.admin }
@@ -22,7 +27,11 @@ const Login = () => {
         console.log(id);
         console.log(token);
         console.log(response.data);
-        addToken(token);
+        
+        navigate('/main');
+
+        dispatch(addToken(token));
+        dispatch(addId(id));
 
         // const data = await response.json();
 

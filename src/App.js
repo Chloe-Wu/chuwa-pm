@@ -1,16 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/Login.jsx"
+import Main from "./pages/Main.jsx"
 import CreateProduct from './pages/CreateProduct.jsx';
 import ManageProduct from './pages/ManageProduct.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
 import ProductInList from './pages/ProductInList.jsx';
-import { AuthProvider } from './AuthContext';
 
 
 import { ChakraProvider, extendBaseTheme, theme as chakraTheme } from '@chakra-ui/react'
-import ManageProduct from './pages/ManageProduct.jsx';
 
 const { Select, Button, ButtonGroup, Input, InputGroup, InputRightElement, MenuItem, InputLabel, FormControl } = chakraTheme.components
 
@@ -28,22 +26,23 @@ const theme = extendBaseTheme({
   },
 })
 
+
+
 function App() {
   return (
-    <Router>
-      <ChakraProvider theme={theme}>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/createProduct" element={<CreateProduct />} />
-            <Route path="/manage-product" element={<ManageProduct />} />
-            <Route path="/product-detail" element={<ProductDetail />} />
-            <Route path="/product-in-list" element={<ProductInList />} />
-            {/* <Route path="/user-cart" element={<UserCart />} /> */}
-          </Routes>
-        </AuthProvider>
-      </ChakraProvider>
-    </ Router>
+    <ChakraProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/main" element={<Main />}/>
+          {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
+          <Route path="/manage-product" element={<ManageProduct />} />
+          <Route path="/product-detail" element={<ProductDetail />} />
+          <Route path="/product-in-list" element={<ProductInList />} />
+          {/* <Route path="/user-cart" element={<UserCart />} /> */}
+        </Routes>
+      </Router>
+    </ChakraProvider>
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />

@@ -3,7 +3,9 @@ import styles from "../scripts/loginForm.module.css"
 import clearIcon from "../assets/clear.svg";
 import { useState } from "react";
 
+
 const AuthForm = ({ onAuthSubmit }) => {
+  
 
   const [scenario, setScenario] = useState("signup");
   const [email, setEmail] = useState("");

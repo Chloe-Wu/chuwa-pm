@@ -3,34 +3,18 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import  Login from "./pages/Login.jsx"
 import CreateProduct from './pages/CreateProduct.jsx';
-import ProductListPage from './pages/ProductList.jsx';
+import ProductList from './pages/ProductList.jsx'; // Changed the import
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/createProduct" element={<CreateProduct />} />
-          <Route path="/products" element={<ProductListPage />} />
-      </Routes>
-    </Router>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/createProduct" element={<CreateProduct />} />
+                <Route path="/products" element={<ProductList />} /> {/* Changed the element */}
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

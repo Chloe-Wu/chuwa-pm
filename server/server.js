@@ -1,9 +1,16 @@
+// import dotenv from 'dotenv';
+// dotenv.config({ path: './.env' });
+
 import cors from "cors";
 import express from "express";
 import connectDB from "./db/index.js";
 import userRouter from "./routers/users.js";
 import productRouter from "./routers/products.js";
 import {} from "dotenv/config";
+
+
+
+console.log(process.env.MONGODB_URI);
 
 
 

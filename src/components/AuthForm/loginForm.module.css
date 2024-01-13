@@ -1,0 +1,149 @@
+.logcontainer{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    color: '#6B7280';
+    font-size: 16;
+    font-family: 'Inter';
+    font-weight: '400';
+    /* background-color: #5048E5; */
+
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+.form{
+    width: 600px;
+    height: 528px;
+    position: relative;
+    background: white;
+    box-shadow: 0px 5px 16px 1px rgba(229, 229, 229, 0.80);
+    border-radius: 10;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding:48px 48px;
+    gap:30px;
+}
+.emailgroup{
+    /* width: 504;
+    height: 88;
+    left: 48;
+    top: 130; */
+    /* position: 'absolute'; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+.logcontainer input{
+    width: 100%;
+    border-radius: 4px;
+    border: 1px #CCCCCC solid;
+    height: 56px;
+    padding-left: 10px;
+}
+input[type="email"]{
+    box-sizing: border-box;
+}
+label{
+    line-height: 24px;
+    word-wrap: 'break-word'
+}
+
+.passwordgroup{
+    /* width: '100%';
+    height: '100%';
+    position: 'relative'; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.formTitle{
+    width: '100%';
+    height: '100%';
+    padding: 10;
+    justify-content: 'center';
+    align-items: 'center';
+    gap: 10;
+    display: 'inline-flex';
+}
+
+.submitBtn{
+    width: 100%;
+    height: 56px;
+    color:white;
+    font-size: 16px;
+    font-family: 'Inter';
+    font-weight: '600';
+    line-height: 21px;
+    word-wrap: 'break-word';
+    background-color: #5048E5;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    display: 'inline-flex';
+}
+.bottomArea{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+.bottomLeftArea{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap:5px;
+}
+.bottomArea input[type="button"]{
+    text-decoration: underline;
+    color: #5048E5;
+    font-weight: 500;
+    border: none;
+    width:fit-content;
+    background-color: white;
+
+}
+.clearIconBox{
+    position: absolute;
+    right: 24px;
+    top: 24px;
+}
+.clearIcon{
+    width: 20px;
+    height: 20px;
+}
+.adminBox{
+    display: flex;
+}
+input[type="checkbox"]{
+    width:20px;
+    height:20px;
+}
+.passwordField{
+    position: relative;
+    width: 100%;
+}
+.passwordInput{
+    width: 100%;
+    box-sizing: border-box;
+}
+.showPasswordIcon{
+    position: absolute;
+    right:10px;
+    top:30%;
+
+}
+/* Mobile-friendly styles */
+@media only screen and (max-width: 768px) {
+    .form {
+        margin:10px;
+        padding: 24px;
+    }
+
+}

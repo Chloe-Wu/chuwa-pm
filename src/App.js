@@ -1,9 +1,13 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from "./pages/Login.jsx"
+import  Login from "./pages/Login.jsx"
+import  Signup from "./pages/Signup.jsx"
 import Main from "./pages/Main.jsx"
-import CreateProduct from './pages/CreateProduct.jsx';
 import ManageProduct from './pages/ManageProduct.jsx';
+import Layout from './pages/Layout.jsx';
+import UpdatePassword from './pages/UpdatePassword.jsx';
+import NotFound from "./pages/NotFound.jsx";
+
 import ProductDetail from './pages/ProductDetail.jsx';
 import ProductInList from './pages/ProductInList.jsx';
 
@@ -34,12 +38,17 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/main" element={<Main />}/>
-          {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
-          <Route path="/manage-product" element={<ManageProduct />} />
-          <Route path="/product-detail" element={<ProductDetail />} />
+          {/* <Route path="/main" element={<Main />}/> */}
+          <Route path="/productList" element={<Layout />} />
+          <Route path="/updatePassword" element={<UpdatePassword />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+          <Route path="/update-product/:id" element={<ManageProduct />} />
+          <Route path="/create-product" element={<ManageProduct />} />
+          <Route path="/product-detail/:id" element={<ProductDetail />} />
           <Route path="/product-in-list" element={<ProductInList />} />
-          {/* <Route path="/user-cart" element={<UserCart />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </ChakraProvider>

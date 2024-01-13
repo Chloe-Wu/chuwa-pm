@@ -7,7 +7,7 @@ input, textarea {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height:1080px;
+    height:1280px;
 }
 
 /* Title */
@@ -26,7 +26,7 @@ input, textarea {
 .manage-product-page .box {
     margin-top: 150px;
     margin-left: 100px;
-    height: 900px;
+    height: 1100px;
     width: 660px;
     background-color: #ffffff;
     border-radius: 4px;
@@ -214,20 +214,22 @@ input, textarea {
 
 /* Image Preview */
 .product-image-preview {
-    width: 50%;
-    right: 50%;
-    height: 230px;
-    margin-top: 30px;
-    margin-left: 25%;
-    margin-right: 25%;
+    margin-top: 25px;
+    margin-left: 20%;
+    height: 60vh;
+    width: 30vw;
+    background-color: rgb(234, 234, 234);
+    position: relative;
+    overflow: hidden;
     border: 3px dashed #6b7280;
 
 }
 
 .product-image-preview .product-image-preview-src {
+    position: absolute;
     width: 100%; /* Make the image fill the entire container width */
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .product-button {

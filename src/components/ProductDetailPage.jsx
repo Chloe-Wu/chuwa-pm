@@ -1,42 +1,44 @@
 import React, { useState, useEffect } from "react";
 import '../scripts/ProductDetailPage.css';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, ButtonGroup, Flex } from '@chakra-ui/react';
-import { set } from "mongoose";
+import { useDispatch, useSelector } from 'react-redux';
+
 
 
 function ProductDetailPage() {
     const navigate = useNavigate();
-    const location = useLocation();
-    const currentPath = location.pathname;
-    
+    const user_token = useSelector((state) => state.user.token);
 
-    const [productID, setProductID] = useState("");
+    // const product_id = "65a1929cb27f060634d9f697";
+
+    const { product_id } = useParams();
+
+    const [productID, setProductID] = useState(product_id);
     const [imageURL, setImageURL] = useState("");
     const [category, setCategory] = useState("");
     const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
     const [quantity, setQuantity] = useState(0);
+    const [initialQuantity, setInitialQuantity] = useState(0);
 
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const lastIndex = currentPath.lastIndexOf('/');
-        const product_id = currentPath.substring(lastIndex + 1);
-        setProductID(product_id);
+        console.log(`Bearer ${user_token}`);
 
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`/api/product/${product_id}`, {
+                const response = await axios.get(`http://localhost:3000/api/product/${product_id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
                 if (response.data.success) {
                     const product = response.data.product;
-                    setImageURL(product.imageURL);
+                    setImageURL(product.imageUrl);
                     setCategory(product.category);
                     setName(product.name);
                     setPrice(product.price);
@@ -54,9 +56,10 @@ function ProductDetailPage() {
 
         const getUserIsAdmin = async () => {
             try {
-                const response = await axios.get("/api/user_get_admin", {
+                const response = await axios.get("http://localhost:3000/api/user_get_admin", {
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user_token}`
                     },
                 });
     
@@ -75,9 +78,10 @@ function ProductDetailPage() {
 
         const getInCartQuantity = async () => {
             try {
-                const response = await axios.get("/api/user_cart", {
+                const response = await axios.get("http://localhost:3000/api/user_cart", {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user_token}`
                     },
                 });
                 if (response.data.success) {
@@ -98,37 +102,39 @@ function ProductDetailPage() {
 
         getInCartQuantity();
 
+        const getProductQuantity = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/product/${product_id}`, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+    
+                if (response.data.success) {
+                    console.log("Success in getting one product");
+                    setInitialQuantity(response.data.product.quantity);
+                } else {
+                    console.error('Fail in getting one product: ', response.data.message);
+                }
+            } catch (err) {
+                console.error('Error in getting one product: ', err.message);
+            }
+        }
+
+        getProductQuantity();
+
     }, []);
 
     
 
     const switchToEdit = () => {
-        navigate('/manage-product');        
-    }
-
-    const getProductQuantity = async () => {
-        try {
-            const response = await axios.get(`/api/product/${productID}`, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            if (response.data.success) {
-                console.log("Success in getting one product");
-                setQuantity(response.data.product.quantity);
-            } else {
-                console.error('Fail in getting one product: ', response.data.message);
-            }
-        } catch (err) {
-            console.error('Error in getting one product: ', err.message);
-        }
+        navigate(`/update-product/${product_id}`);        
     }
 
     
     const userIncreaseProduct = async () => {
         try {
-            const response = await axios.post(`/api/user_increase_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_increase_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -154,7 +160,7 @@ function ProductDetailPage() {
 
     const userDecreaseProduct = async () => {
         try {
-            const response = await axios.post(`/api/user_decrease_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_decrease_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -183,7 +189,7 @@ function ProductDetailPage() {
 
     const addProduct = async () => {
         try {
-            const response = await axios.post(`/api/user_add_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_add_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -212,7 +218,7 @@ function ProductDetailPage() {
 
     const removeProduct = async () => {
         try {
-            const response = await axios.delete(`/api/user_remove/${productID}`, {
+            const response = await axios.delete(`http://localhost:3000/api/user_remove/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -239,7 +245,7 @@ function ProductDetailPage() {
                     <div className="product-detail-name">{name}</div>
                     <div className="product-detail-price-ifstock">
                         <div className="product-detail-price">${price}</div>
-                        {getProductQuantity() > 0 ? 
+                        {initialQuantity > 0 ? 
                             <div className="product-detail-ifstock">In stock</div> : 
                             <div className="product-detail-outstock">Out of stock</div>
                         }

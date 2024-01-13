@@ -6,25 +6,20 @@ import { Search2Icon } from '@chakra-ui/icons'
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { addToken, removeToken, addId, removeId } from "../../TokenSlice.jsx"
+import { Link } from "react-router-dom";
+import { logOutUser } from "../../slices/userSlice";
 
 
 
 function Header() {
-  const user_id = useSelector((state) => state.info.id);
-  const user_token = useSelector((state) => state.info.token);
   const dispatch = useDispatch();
-
-
   const navigate = useNavigate();
 
-  const handleSign = () => {
-    if (user_token !== null) {
-      dispatch(removeToken());
-      dispatch(removeId());
-    } else {
-      navigate('/');
-    }
+  const [loading, setLoading] = React.useState(false);
+
+  const handleSignOut = () => {
+    dispatch(logOutUser());
+    navigate('/login');
   }
 
   const intoCart = () => {
@@ -85,11 +80,12 @@ function Header() {
       </div>
       <div className="div-2">
         <div className="div-3">
-          {/* <img className="img" alt="Carbon user" src={carbonUser} /> */}
-          <div className="text-wrapper-2" onClick={handleSign}>{user_token !== null ? "Sign out" : "Sign In"}</div>
+          <div className="text-wrapper-2" onClick={handleSignOut}>
+            Log out
+          </div> 
         </div>
         <div className="div-3" onClick={intoCart}>
-          <div className="text-wrapper-2">{user_token !== null ? calculatePrice() : ""}</div>
+          <div className="text-wrapper-2">$50</div>
         </div>
       </div>
     </div>

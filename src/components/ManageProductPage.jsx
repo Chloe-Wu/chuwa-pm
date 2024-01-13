@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import '../scripts/ManageProductPage.css';
-import { Select, FormControl, MenuItem, Button, ButtonGroup } from '@chakra-ui/react';
+import { Select, Button, ButtonGroup } from '@chakra-ui/react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ManageProductPage() {
     const [imageURL, setImageURL] = useState("");
@@ -15,27 +16,32 @@ function ManageProductPage() {
 
     const location = useLocation();
     const currentPath = location.pathname;
+    const navigate = useNavigate();
+
+    const { product_id } = useParams();
+
+    const user_token = useSelector((state) => state.user.token);
+    
     
     useEffect(() => {
-        if (currentPath.includes("update_product")) {
-            const lastIndex = currentPath.lastIndexOf('/');
-            const product_id = currentPath.substring(lastIndex + 1);
+        if (currentPath.includes("update-product")) {
             setProductID(product_id);
 
             const fetchProduct = async () => {
                 try {
-                    const response = await axios.get(`/api/product/${product_id}`, {
+                    const response = await axios.get(`http://localhost:3000/api/product/${product_id}`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
                     if (response.data.success) {
                         const product = response.data.product;
-                        setImageURL(product.imageURL);
+                        setImageURL(product.imageUrl);
                         setCategory(product.category);
                         setName(product.name);
                         setPrice(product.price);
                         setDescription(product.description);
+                        setQuantity(product.quantity);
                         console.log("Success in getting product props");
                     } else {
                         console.error('Fail in getting product props: ', response.data.message);
@@ -51,11 +57,6 @@ function ManageProductPage() {
 
 
 
-    const handleImgChange = async (e) => {
-        setImageURL(URL.createObjectURL(e.target.files[0]));
-    };
-
-
     const submitProduct = async (e) => {
         e.preventDefault();
 
@@ -65,15 +66,18 @@ function ManageProductPage() {
             category: category,
             price: price,
             quantity: quantity,
-            imageURL: imageURL
+            imageUrl: imageURL
         };
 
-        if (currentPath.includes("create_product")) {
+        if (currentPath.includes("create-product")) {
             try {
-                const response = await axios.post(`/api/create_product`, {
+                const response = await axios.post(
+                    `http://localhost:3000/api/create_product`,
+                    formData, 
+                    {
                     headers: {
                         'Content-Type': 'application/json',
-                        body: JSON.stringify(formData),
+                        'Authorization': `Bearer ${user_token}`
                     },
                 });
         
@@ -90,15 +94,19 @@ function ManageProductPage() {
             }
         } else {
             try {
-                const response = await axios.post(`/api/update_product/${productID}`, {
+                const response = await axios.post(
+                    `http://localhost:3000/api/update_product/${productID}`,
+                    formData, 
+                    {
                     headers: {
                         'Content-Type': 'application/json',
-                        body: JSON.stringify(formData),
+                        'Authorization': `Bearer ${user_token}`
                     },
                 });
         
                 if(response.data.success){
-                    console.log("Product updated!")
+                    console.log("Product updated!");
+                    navigate(`/product-detail/${product_id}`)
                 }else{
                     console.log("failed to update product data! The reason is: " + response.data.message)
                 }
@@ -136,29 +144,17 @@ function ManageProductPage() {
                 <div className="product-category-price">
                     <div className="product-category">
                         <h5 className="product-category-title">Category</h5>
-                        <FormControl className="product-category-input"  fullWidth>
-                            <Select
-                                labelId="category-select-label"
-                                id="category-select"
-                                value={category}
-                                label="Category"
-                                onChange={(e) => setCategory(e.target.value)}
-                            >
-                                <MenuItem key={0} value='Groceries & Stores'>Groceries & Stores</MenuItem>
-                                <MenuItem key={1} value='Medical Care & Pharmacy'>Medical Care & Pharmacy</MenuItem>
-                                <MenuItem key={2} value='Pets'>Pets</MenuItem>
-                                <MenuItem key={3} value='Fashion & Beauty'>Fashion & Beauty</MenuItem>
-                                <MenuItem key={4} value='Home & DIY'>Home & DIY</MenuItem>
-                                <MenuItem key={5} value='Devices & Electronics'>Devices & Electronics</MenuItem>
-                                <MenuItem key={6} value='Music, Video & Gaming'>Music, Video & Gaming</MenuItem>
-                                <MenuItem key={7} value='Books & Reading'>Books & Reading</MenuItem>
-                                <MenuItem key={8} value='Toys, Kids & Baby'>Toys, Kids & Baby</MenuItem>
-                                <MenuItem key={9} value='Automotive'>Automotive</MenuItem>
-                                <MenuItem key={10} value='Office & Professional'>Office & Professional</MenuItem>
-                                <MenuItem key={11} value='Sports & Fanshop'>Sports & Fanshop</MenuItem>
-                                <MenuItem key={12} value='Outdoor & Travel'>Outdoor & Travel</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Select 
+                            className="product-category-input"
+                            id="category-select"
+                            value={category}
+                            label="Category"
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            <option value='Phones'>Phones</option>
+                            <option value='Laptops'>Laptops</option>
+                            <option value='Clothes'>Clothes</option>
+                        </Select>
                         {/* <select 
                             className="product-category-input"
                             placeholder="Select option"
@@ -184,6 +180,7 @@ function ManageProductPage() {
                     <div className="product-quantity">
                         <h5 className="product-quantity-title">In Stock Quantity</h5>
                         <input
+                            placeholder={quantity}
                             className="product-quantity-input"
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
@@ -193,15 +190,21 @@ function ManageProductPage() {
                     <div className="product-image">
                         <h5 className="product-image-title">Add Image Link</h5>
                         <div className="product-image-wrap">
-                            <input
+                            {/* <input
                                 className="product-image-input"
                                 onChange={handleImgChange}
                                 type="file"
                                 accept="image/*"
                                 aria-describedby="fileInputDescription"
                                 placeholder="http://"
+                            /> */}
+                            <input
+                                placeholder="https://"
+                                className="product-image-input"
+                                value={imageURL}
+                                onChange={(e) => setImageURL(e.target.value)}
+                                type="text"
                             />
-                            {/* <Button className="product-image-button" colorScheme='teal'>Upload</Button> */}
                         </div>
                     </div>
                 </div>

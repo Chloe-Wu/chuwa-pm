@@ -17,7 +17,15 @@ app.use(express.json());
 app.use("/api", userRouter);
 app.use("/api", productRouter);
 
-// Other CRUD endpoints...
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});
+
+app.use(cors({
+  origin: 'http://localhost:3001', 
+  credentials: true,
+}));
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

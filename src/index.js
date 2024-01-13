@@ -3,24 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.js';
 import reportWebVitals from './reportWebVitals.js';
-import todoReducer from "./TokenSlice.jsx";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
+import store from "./slices/store.jsx";
+import { jwtDecode } from "jwt-decode";
+// import { setCurrentUser } from './slices/userSlice.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const store = configureStore({
-  reducer: {
-    info: todoReducer,
-  },
-});
+// if (localStorage.getItem('token')) {
+//   store.dispatch(setCurrentUser(jwtDecode(localStorage.getItem('token'))));
+// }
 
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

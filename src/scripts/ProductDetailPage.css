@@ -93,6 +93,8 @@
     /* border: 1px solid rgb(100, 178, 123); */
     border-radius: 4px;
     width: fit-content;
+    padding-left: 1vw;
+    padding-right: 1vw;
     height: 36px;
     line-height: 30px;
     margin-top: 12px;
@@ -107,6 +109,8 @@
     color: rgb(244, 75, 75);
     border-radius: 4px;
     width: fit-content;
+    padding-left: 1vw;
+    padding-right: 1vw;
     height: 36px;
     line-height: 30px;
     margin-top: 12px;

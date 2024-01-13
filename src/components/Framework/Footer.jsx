@@ -6,10 +6,10 @@ function Footer(){
     <div className="footer">
       <div className="candleaf-all">©2024 All Rights Reserved.</div>
       <div className="icon-image-container">
-        <img className="social-icons" alt="Social icons" src="/tiktok_icon.png" />
-        <img className="social-icons" alt="Social icons" src="/facebook_icon.png" />
-        <img className="social-icons" alt="Social icons" src="/ins_icon.png" />
-        <img className="social-icons" alt="Social icons" src="/X_icon.png" />
+        <img className="social-icons" alt="Social icons" src="../../assets/tiktok_icon.png" />
+        <img className="social-icons" alt="Social icons" src="../../assets/facebook_icon.png" />
+        <img className="social-icons" alt="Social icons" src="../../assets/ins_icon.png" />
+        <img className="social-icons" alt="Social icons" src="../../assets/X_icon.png" />
       </div>
       <div className="group">
         <div className="text-wrapper">Contact us</div>

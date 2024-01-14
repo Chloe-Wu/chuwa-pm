@@ -4,6 +4,7 @@ import  Login from "./pages/Login.jsx"
 import  Signup from "./pages/Signup.jsx"
 import Main from "./pages/Main.jsx"
 import ManageProduct from './pages/ManageProduct.jsx';
+import ProductList from './pages/ProductList.jsx';
 import Layout from './pages/Layout.jsx';
 import UpdatePassword from './pages/UpdatePassword.jsx';
 import NotFound from "./pages/NotFound.jsx";
@@ -39,7 +40,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           {/* <Route path="/main" element={<Main />}/> */}
-          <Route path="/productList" element={<Layout />} />
+          <Route path="/productList" element={<ProductList />} />
           <Route path="/updatePassword" element={<UpdatePassword />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

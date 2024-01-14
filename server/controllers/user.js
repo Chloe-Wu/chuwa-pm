@@ -98,6 +98,7 @@ export const addProduct = async (req, res) => {
     }
     // Add product into cart
     const target = { product: product.id, quantity: 1 };
+    const target = { product: product.id, quantity: 1 };
     const status =
       target.quantity === product.quantity ? "Reach maximum" : "Good";
     cart.push(target);
@@ -204,6 +205,15 @@ export const getUserCart = async (req, res) => {
         return isValid;
       })
     );
+    const valid = await Promise.all(
+      cart.map(async (target) => {
+        const product = await Product.findById(target.product);
+        const isValid =
+          target.quantity <= product.quantity && product.quantity > 0;
+        target.quantity = Math.min(target.quantity, product.quantity);
+        return isValid;
+      })
+    );
     const success = valid.every((isValid) => isValid);
     // Remove products that are out of stock
     if (!success) {
@@ -211,7 +221,14 @@ export const getUserCart = async (req, res) => {
         return product.quantity > 0;
       });
     }
+    // Remove products that are out of stock
+    if (!success) {
+      user.cart = cart.filter((product) => {
+        return product.quantity > 0;
+      });
+    }
     await user.save();
+    res.status(200).json({ success, cart: user.cart });
     res.status(200).json({ success, cart: user.cart });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
@@ -232,6 +249,15 @@ export const checkout = async (req, res) => {
         return isValid;
       })
     );
+    const valid = await Promise.all(
+      cart.map(async (target) => {
+        const product = await Product.findById(target.product);
+        const isValid =
+          target.quantity <= product.quantity && product.quantity > 0;
+        target.quantity = Math.min(target.quantity, product.quantity);
+        return isValid;
+      })
+    );
     const success = valid.every((isValid) => isValid);
     // If nothing goes wrong, checkout
     if (success) {
@@ -241,6 +267,11 @@ export const checkout = async (req, res) => {
         await product.save();
       });
       user.cart = [];
+    } else {
+      // Remove products that are out of stock
+      user.cart = cart.filter((product) => {
+        return product.quantity > 0;
+      });
     } else {
       // Remove products that are out of stock
       user.cart = cart.filter((product) => {

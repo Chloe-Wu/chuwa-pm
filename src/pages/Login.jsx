@@ -1,32 +1,29 @@
-import axios from "axios";
-import AuthForm from "../components/AuthForm";
+import React from 'react';
+import axios from 'axios';
+import AuthForm from '../components/AuthForm';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const handleAuthSubmit = async (formData) => {
     const { scenario, email, password } = formData;
-    // console.log(scenario, email, password);
 
-    // fetch data
     try {
-      if (scenario === "login" || scenario === "signup") {
-        const response = await axios.post(
-          `http://localhost:3000/api/${scenario}`,
-          scenario === "login"
-            ? { email, password }
-            : { email, password, admin: formData.admin }
-        );
-        const { id, token } = response.data;
-        console.log(id);
-        console.log(token);
-        console.log(response.data)
+      if (scenario === 'login' || scenario === 'signup') {
+        const response = await axios.post(`http://localhost:3000/api/${scenario}`, {
+          email,
+          password,
+        });
 
-        // const data = await response.json();
+        const { id, token, admin } = response.data;
 
-        // if (response.ok) {
-        //   console.log(`${scenario} successful:`, data);
-        // } else {
-        //   console.error(`${scenario} failed:`, data.message);
-        // }
+        // Save user data and token to localStorage
+        localStorage.setItem('user', JSON.stringify({ email, admin, password, id }));
+        localStorage.setItem('token', token);
+
+        // Redirect to ProductList after successful login with user data
+        navigate('/products');
       }
     } catch (error) {
       console.error(`Error during ${scenario}:`, error.message);
@@ -34,9 +31,9 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <AuthForm onAuthSubmit={handleAuthSubmit} />
-    </div>
+      <div>
+        <AuthForm onAuthSubmit={handleAuthSubmit} />
+      </div>
   );
 };
 

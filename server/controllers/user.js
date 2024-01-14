@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 
+
 export const userSignUp = async (req, res) => {
   try {
     const { email, password, admin } = req.body;

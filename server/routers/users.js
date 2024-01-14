@@ -9,6 +9,7 @@ import {
   removeProduct,
   getUserCart,
   checkout,
+
 } from "../controllers/user.js";
 
 const userRouter = Router();
@@ -28,5 +29,8 @@ userRouter.delete("/user_remove/:id", userAuth, removeProduct);
 userRouter.get("/user_cart", userAuth, getUserCart)
 
 userRouter.post("/user_checkout", userAuth, checkout);
+
+
+
 
 export default userRouter;

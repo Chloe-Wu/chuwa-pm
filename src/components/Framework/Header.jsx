@@ -18,7 +18,6 @@ function Header() {
   const [loading, setLoading] = React.useState(false);
 
   const isMobile = useMediaQuery("(max-width: 450px)");
-  console.log(isMobile);
 
   const handleSignOut = () => {
     dispatch(logOutUser());

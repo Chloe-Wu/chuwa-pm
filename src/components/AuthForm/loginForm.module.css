@@ -86,13 +86,6 @@ label{
     align-items: center;
     display: 'inline-flex';
 }
-.bottomArea{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-}
 .bottomLeftArea{
     display: flex;
     flex-direction: row;

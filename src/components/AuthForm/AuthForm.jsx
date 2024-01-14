@@ -1,20 +1,21 @@
 import { Link } from "react-router-dom";
 import styles from "./loginForm.module.css";
 import clearIcon from "../../assets/clear.svg";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
-const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
+const AuthForm = ({ onAuthSubmit, scenario: initialScenario }) => {
   const [scenario, setScenario] = useState(initialScenario);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [admin, setAdmin] = useState(false);
-  const [showpassword, setShowPassword] = useState(false)
+  const [showpassword, setShowPassword] = useState(false);
+
+  const isMobile = useMediaQuery("(max-width: 450px)");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    
     onAuthSubmit({ scenario, email, password, admin });
   };
 
@@ -22,9 +23,20 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
     setScenario(newScenario);
   };
 
-  const handlePasswordClick = () =>{
+  const handlePasswordClick = () => {
     setShowPassword(!showpassword);
-  }
+  };
+
+  const bottomAreaStyle = useMemo(
+    () => ({
+      display: "flex",
+      flexDirection: isMobile ? "column" : "row",
+      justifyContent: "space-between",
+      alignItems: isMobile ? "baseline" : "center",
+      fontSize: "14px",
+    }),
+    [isMobile]
+  );
 
   return (
     <>
@@ -61,11 +73,20 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                  <div className={styles.showPasswordIcon} onClick={handlePasswordClick}>{showpassword?<PiEye size={25} />:<PiEyeClosed  size={25}/>}</div>
+                  <div
+                    className={styles.showPasswordIcon}
+                    onClick={handlePasswordClick}
+                  >
+                    {showpassword ? (
+                      <PiEye size={25} />
+                    ) : (
+                      <PiEyeClosed size={25} />
+                    )}
+                  </div>
                 </div>
               </div>
               <div className={styles.adminBox}>
-                <label htmlFor="admin">Administrator:</label>
+                <label htmlFor="admin">Administrator:&nbsp;</label>
                 <input
                   id="admin"
                   type="checkbox"
@@ -82,9 +103,9 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
                   className={styles.submitBtn}
                 />
               </div>
-              <div className={styles.bottomArea}>
+              <div style={bottomAreaStyle}>
                 <div className={styles.bottomLeftArea}>
-                  <span>Already have an account</span>
+                  <span>Already have an account?</span>
                   {/* <input
                     type="button"
                     className={styles.underlineBtn}
@@ -92,7 +113,7 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
                     value="login"
                   /> */}
                   <Link to="/login">login</Link>
-                  </div>
+                </div>
               </div>
             </>
           )}
@@ -123,7 +144,16 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                  <div className={styles.showPasswordIcon} onClick={handlePasswordClick}>{showpassword?<PiEye size={25} />:<PiEyeClosed  size={25}/>}</div>
+                  <div
+                    className={styles.showPasswordIcon}
+                    onClick={handlePasswordClick}
+                  >
+                    {showpassword ? (
+                      <PiEye size={25} />
+                    ) : (
+                      <PiEyeClosed size={25} />
+                    )}
+                  </div>
                 </div>
               </div>
               <div>
@@ -133,14 +163,14 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
                   className={styles.submitBtn}
                 />
               </div>
-              <div className={styles.bottomArea}>
+              <div style={bottomAreaStyle}>
                 <div>
                   <span>Don't have an account? </span>
 
                   <Link to="/signup">signup</Link>
                 </div>
+                <br />
                 <Link to="/updatePassword">Forgot password?</Link>
-
               </div>
             </>
           )}
@@ -148,7 +178,9 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
           {scenario === "forgot-password" && (
             <>
               <h2 className={styles.formTitle}>Update your password</h2>
-              <span>Enter your email link, we will send you the recovery link</span>
+              <span>
+                Enter your email link, we will send you the recovery link
+              </span>
               <div className={styles.emailgroup}>
                 <label htmlFor="email">Email:</label>
                 <input
@@ -174,7 +206,7 @@ const AuthForm = ({ onAuthSubmit,scenario: initialScenario }) => {
             <>
               <p>
                 We have sent the update password link to your email, please
-                check that ！
+                check that !
               </p>
             </>
           )}

@@ -1,16 +1,29 @@
-import React from 'react';
-import Header from '../components/Framework/Header';
-import Footer from '../components/Framework/Footer';
-import ManageProductPage from '../components/ManageProductPage';
+import React from "react";
+import Header from "../components/Framework/Header";
+import Footer from "../components/Framework/Footer";
+import ManageProductPage from "../components/ManageProductPage";
+
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 function ManageProduct() {
+  const isMobile = useMediaQuery("(max-width: 450px)");
+
+  if (isMobile) {
     return (
-        <div>
-            <Header />
-            <ManageProductPage />
-            <Footer />
-        </div>
-    )
+      <>
+        <Header />
+        <Footer />
+      </>
+    );
   }
-  
-  export default ManageProduct;
+
+  return (
+    <div>
+      <Header />
+      <ManageProductPage />
+      <Footer />
+    </div>
+  );
+}
+
+export default ManageProduct;

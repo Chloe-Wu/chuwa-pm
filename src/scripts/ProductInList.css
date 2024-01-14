@@ -1,6 +1,6 @@
 .frame {
-    width: 400px;
-    height: 550px;
+    width: 270px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     border: 1px solid #bdbdbd;
@@ -14,8 +14,8 @@
 /* Image */
 .frame .image {
     margin: 10px;
-    height: 350px;
-    width: 370px;
+    height: 240px;
+    width: 240px;
     overflow: hidden;
     display: flex;
     justify-content: center;

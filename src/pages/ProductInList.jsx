@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react'
 import '../scripts/ProductInList.css';
 
-function ProductInList({ product }) {
+function ProductInList({ product, user }) {
     const [quantity, setQuantity] = useState(0);
 
     const decreaseQuantity = () => {
@@ -18,10 +18,10 @@ function ProductInList({ product }) {
   return (
     <div className="frame">
         <div className="image">
-            <img className="image-src" src="https://i.redd.it/5ud6o4d37j491.jpg" alt="Apple iPhone 11, 128G" />
+            <img className="image-src" src={product.imageUrl} alt="Apple iPhone 11, 128G" />
         </div>
-        <div className="name">Apple iPhone 11, 128G</div>
-        <div className="price">$699.00</div>
+        <div className="name">{product.name}</div>
+        <div className="price">${product.price}</div>
         <div className="buttons">
             <Flex className="button1" align="center">
                 <Button 

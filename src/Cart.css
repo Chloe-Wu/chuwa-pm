@@ -86,3 +86,45 @@
     padding: 10px 20px;
     font-size: 16px;
 }
+
+.product-name {
+    margin: 0;
+    font-size: 16px;
+    color: #000; /* 设置商品名称文字颜色为黑色 */
+}
+
+.product-price {
+    margin: 0;
+    font-size: 16px;
+    color: #000; /* 设置商品价格文字颜色为黑色 */
+}
+
+.product-quantity {
+    font-size: 16px;
+    color: #000;
+    margin-left: auto; /* 将商品数量、按钮和删除按钮靠右对齐 */
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.item-actions button {
+    background-color: #605f5f; /* 设置按钮背景颜色 */
+    color: #fff; /* 设置按钮文字颜色 */
+    border: none;
+    cursor: pointer;
+    padding: 5px 7px;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+#exit{
+    color: whitesmoke;
+}

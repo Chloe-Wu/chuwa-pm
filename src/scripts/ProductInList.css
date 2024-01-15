@@ -49,7 +49,6 @@
 
 /* Button */
 .frame .buttons {
-    margin-left: 10px;
     margin-top: 30px;
     display: flex;
     flex-direction: row;
@@ -57,8 +56,8 @@
 }
 
 .buttons .button1 {
-    width: 50%;
+    width: 45%;
 }
 .buttons .button2 {
-    width: 50%;
+    width: 45%;
 }

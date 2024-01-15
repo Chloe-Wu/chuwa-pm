@@ -25,7 +25,7 @@ export default function Login(){
         dispatch(setCurrentUser(user.payload.id));
         dispatch(setCurrentToken(user.payload.token));
 
-        navigate('/productList');
+        navigate('/product-list');
         
       } else {
         alert("Invalid username or password");

@@ -13,9 +13,9 @@ function ProductDetailPage() {
 
     // const product_id = "65a1929cb27f060634d9f697";
 
-    const { product_id } = useParams();
+    const { id } = useParams();
 
-    const [productID, setProductID] = useState(product_id);
+    const [productID, setProductID] = useState(id);
     const [imageURL, setImageURL] = useState("");
     const [category, setCategory] = useState("");
     const [name, setName] = useState("");
@@ -31,9 +31,10 @@ function ProductDetailPage() {
 
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/product/${product_id}`, {
+                const response = await axios.get(`http://localhost:3000/api/product/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `${user_token}`,
                     },
                 });
                 if (response.data.success) {
@@ -59,7 +60,7 @@ function ProductDetailPage() {
                 const response = await axios.get("http://localhost:3000/api/user_get_admin", {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user_token}`
+                        'Authorization': `${user_token}`
                     },
                 });
     
@@ -81,7 +82,7 @@ function ProductDetailPage() {
                 const response = await axios.get("http://localhost:3000/api/user_cart", {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user_token}`
+                        'Authorization': `${user_token}`
                     },
                 });
                 if (response.data.success) {
@@ -104,9 +105,10 @@ function ProductDetailPage() {
 
         const getProductQuantity = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/product/${product_id}`, {
+                const response = await axios.get(`http://localhost:3000/api/product/${id}`, {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `${user_token}`,
                     },
                 });
     
@@ -128,15 +130,20 @@ function ProductDetailPage() {
     
 
     const switchToEdit = () => {
-        navigate(`/update-product/${product_id}`);        
+        navigate(`/update-product/${id}`);        
+    }
+
+    const switchToList = () => {
+        navigate('/product-list');   
     }
 
     
     const userIncreaseProduct = async () => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/user_increase_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_increase_product/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${user_token}`,
                 },
             });
             if (response.data.success) {
@@ -160,9 +167,10 @@ function ProductDetailPage() {
 
     const userDecreaseProduct = async () => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/user_decrease_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_decrease_product/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${user_token}`,
                 },
             });
             if (response.data.success) {
@@ -189,9 +197,10 @@ function ProductDetailPage() {
 
     const addProduct = async () => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/user_add_product/${productID}`, {
+            const response = await axios.post(`http://localhost:3000/api/user_add_product/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${user_token}`,
                 },
             });
             if (response.data.success) {
@@ -218,9 +227,10 @@ function ProductDetailPage() {
 
     const removeProduct = async () => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/user_remove/${productID}`, {
+            const response = await axios.delete(`http://localhost:3000/api/user_remove/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `${user_token}`,
                 },
             });
             if (response.data.success) {
@@ -289,6 +299,13 @@ function ProductDetailPage() {
                                 Edit
                             </Button>
                         }
+                        <Button 
+                                className="product-detail-button3" 
+                                colorScheme='gray'
+                                onClick={switchToList}
+                            >
+                                Return to List
+                        </Button>
                     </div>
                 </div>
             </div>

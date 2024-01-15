@@ -66,7 +66,7 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
 
             if (response.data.success) {
                 console.log("success get the id");
-                console.log("ProductdeTails: " + response.data.productDetails);
+                console.log("Product details: " + response.data.productDetails);
                 return response.data.productDetails;
 
             }

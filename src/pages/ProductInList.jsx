@@ -537,8 +537,8 @@ function ProductInList({ product }) {
 
 
   return (
-    <div className="frame" onClick={SwitchToProductDetail}>
-      <div className="image">
+    <div className="frame">
+      <div className="image" onClick={SwitchToProductDetail}>
         <img className="image-src" src={imageURL} alt="No Image or Error" />
       </div>
       <div className="name">{name}</div>

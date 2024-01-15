@@ -8,14 +8,12 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
     // console.log("Cart component cart data:", cart);
 
     useEffect(() => {
-        // 在组件加载时获取购物车数据
         fetchCartData();
     }, [userId, userToken]);
 
     const fetchCartData = async () => {
         try {
             if (userId && userToken) {
-                // 使用 userId 和 userToken 发送请求获取购物车数据
                 const response = await axios.get('/api/user_cart', {
                     headers: {
                         'Authorization': `Bearer ${userToken}`
@@ -31,7 +29,6 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                         try {
                             const productDetails = await fetchProductDetails(item._id);
 
-                            // 将获取的产品详细信息合并到购物车项中
                             return {
                                 ...item,
                                 product: {
@@ -42,7 +39,6 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                             };
                         } catch (error) {
                             console.error('Error fetching product details:', error);
-                            // 如果出现错误，可以返回一个默认值或空对象
                             return {
                                 ...item,
                                 product: {
@@ -65,7 +61,6 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
     };
     const fetchProductDetails = async (productId) => {
         try {
-            // 使用产品ID向后端发送请求获取产品详细信息
             console.log("这是当前的" + productId);
             const response = await axios.get(`/api/product/${productId}`);
 
@@ -78,7 +73,7 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
         } catch (error) {
             console.error('Error fetching product details:', error);
         }
-        // 如果获取失败或发生错误，可以返回默认值或空对象
+
         return { imageUrl: '', price: 0 };
     };
     const updateTotalPrice = (cartData) => {

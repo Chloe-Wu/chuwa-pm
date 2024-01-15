@@ -39,13 +39,11 @@ const ProductList = () => {
   // // console.log(user_token)
 
   const handleUpdateCart = (updatedCart) => {
-    // 在这里执行更新购物车的操作，可以将新的购物车数据存储在状态中
-    // 更新购物车后，调用该函数来更新购物车
+
   };
 
   const handleRemoveFromCart = (productId, updatedCart) => {
-    // 在这里执行从购物车中删除商品的操作，可以将新的购物车数据存储在状态中
-    // 删除商品后，调用该函数来更新购物车
+
   };
 
   const handleSignOut = () => {

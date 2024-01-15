@@ -29,6 +29,11 @@ function Header() {
     console.log("Sign out");
     console.log("User token: ", user_token);
     console.log("User id: ", user_id);
+    navigate('/product-list');
+  }
+
+  const handleLogIn = () => {
+    console.log("Switching to log in");
     navigate('/login');
   }
 
@@ -100,9 +105,14 @@ function Header() {
       </div>
       <div className="div-2">
         <div className="div-3">
-          <div className="text-wrapper-2" onClick={handleSignOut}>
-            Log out
-          </div> 
+          {user_token != null ? 
+              (<div className="text-wrapper-2" onClick={handleSignOut}>
+                Log out
+              </div>) : 
+              (<div className="text-wrapper-2" onClick={handleLogIn}>
+                Sign In 
+              </div>)
+          }
         </div>
         {user_token != null && <div className="div-3" onClick={intoCart}>
           <div className="text-wrapper-2">${totalPrice}</div>

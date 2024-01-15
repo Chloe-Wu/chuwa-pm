@@ -189,7 +189,7 @@ function ProductDetailPage() {
             console.error('Error for decreasing the product:', error.message);
         }
     }
-  };
+  
 
     const addProduct = async () => {
         try {
@@ -219,7 +219,7 @@ function ProductDetailPage() {
             console.error('Error for adding the product:', error.message);
         }
     }
-  };
+  
 
     const removeProduct = async () => {
         try {
@@ -237,7 +237,7 @@ function ProductDetailPage() {
             console.error('Error for removing the product:', error.message);
         }
     }
-  };
+  
 
     return (
         <div className="product-detail-page">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Cart.css';
+import '../scripts/Cart.css';
 import axios from 'axios';
 const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOpen }) => {
     const [cart, setCart] = useState([]);

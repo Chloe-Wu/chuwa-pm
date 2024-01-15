@@ -21,7 +21,7 @@ export const getUserProps = async (req, res) => {
 export const getUserIsAdmin = async (req, res) => {
   try {
     const user = await User.findById(req.body.userID);
-    console.log("Returning if a user is admin");
+    // console.log("Returning if a user is admin");
     res.status(201).json({ success: true, message: "User admin getting", admin: user.admin});
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
@@ -109,6 +109,7 @@ export const addProduct = async (req, res) => {
 };
 
 export const increaseProduct = async (req, res) => {
+  console.log("here")
   try {
     const product = await Product.findById(req.params?.id);
     const user = await User.findById(req.body.userID);

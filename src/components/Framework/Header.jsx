@@ -93,16 +93,15 @@ function Header() {
             </p>
           </div>
 
-          <div className="header-right-mobile">
+          {/* <div className="header-right-mobile">
               <div className="text-wrapper-2" onClick={handleSignOut}>
                 Log out
               </div>
               <div className="text-wrapper-2" onClick={intoCart}>$50</div>
-          </div>
+          </div> */}
         </div>
 
-        <div className="header-mid-mobile">
-          {/* <img className="walmart-logo-web" alt="Walmart logo web" src={walmartLogoWeb} /> */}
+        {/* <div className="header-mid-mobile">
           <div className="search-box-mobile">
             <InputGroup>
               <Input />
@@ -118,7 +117,7 @@ function Header() {
               </InputRightElement>
             </InputGroup>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   } else {
@@ -130,8 +129,7 @@ function Header() {
             <span style={logoRightStyle}>Shopping</span>
           </p>
         </div>
-        <div className="header-mid">
-          {/* <img className="walmart-logo-web" alt="Walmart logo web" src={walmartLogoWeb} /> */}
+        {/* <div className="header-mid">
           <div className="search-box">
             <InputGroup>
               <Input />
@@ -157,7 +155,7 @@ function Header() {
           <div className="div-3" onClick={intoCart}>
             <div className="text-wrapper-2">$ {totalPrice}</div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

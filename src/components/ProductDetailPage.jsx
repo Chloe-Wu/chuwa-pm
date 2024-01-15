@@ -153,7 +153,7 @@ function ProductDetailPage() {
   const userIncreaseProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_increase_product/${id}`,
+        `http://localhost:3000/api/user_increase_product/${id}`, {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +192,7 @@ function ProductDetailPage() {
   const userDecreaseProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_decrease_product/${id}`,
+        `http://localhost:3000/api/user_decrease_product/${id}`, {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -234,7 +234,7 @@ function ProductDetailPage() {
   const addProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_add_product/${id}`,
+        `http://localhost:3000/api/user_add_product/${id}`, {},
         {
           headers: {
             "Content-Type": "application/json",

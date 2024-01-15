@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as jwt_decode from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation
 import axios from "axios";
-import "../ProductListStyle.css";
+import "../scripts/ProductList.css";
 import Cart from "./Cart.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -147,7 +147,7 @@ const ProductList = () => {
   return (
     <div>
       <div className="top-bar">
-        <div className="logo">Chuwa Shop</div>
+        <div className="logo">Management</div>
         <div id="search-box">
           <input
             type="text"

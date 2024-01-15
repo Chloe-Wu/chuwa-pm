@@ -1,35 +1,35 @@
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import React, { useMemo, useState } from "react";
 import "../../scripts/Framework/Header.css";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { Search2Icon } from "@chakra-ui/icons";
-import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { logOutUser } from "../../slices/userSlice";
+// import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+// import { Search2Icon } from "@chakra-ui/icons";
+// import axios from "axios";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { useSelector, useDispatch } from "react-redux";
+// import { Link } from "react-router-dom";
+// import { logOutUser } from "../../slices/userSlice";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { is } from "@babel/types";
+// import { is } from "@babel/types";
 
 function Header() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
+  // const [loading, setLoading] = useState(false);
+  // const [totalPrice, setTotalPrice] = useState(0);
 
   const isMobile = useMediaQuery("(max-width: 450px)");
 
-  const user_token = useSelector((state) => state.user.token);
+  // const user_token = useSelector((state) => state.user.token);
 
-  const handleSignOut = () => {
-    dispatch(logOutUser());
-    navigate("/login");
-  };
+  // const handleSignOut = () => {
+  //   dispatch(logOutUser());
+  //   navigate("/login");
+  // };
 
-  const intoCart = () => {
-    navigate("/user-cart");
-  };
+  // const intoCart = () => {
+  //   navigate("/user-cart");
+  // };
 
   const logoLeftStyle = useMemo(
     () => ({
@@ -52,34 +52,34 @@ function Header() {
     [isMobile]
   );
 
-  const calculatePrice = async () => {
-    try {
-      const response = await axios.get("/api/user_cart", {
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `${user_token}`,
-        },
-      });
+  // const calculatePrice = async () => {
+  //   try {
+  //     const response = await axios.get("/api/user_cart", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': `${user_token}`,
+  //       },
+  //     });
 
-      if (response.data.success) {
-        console.log("Success in getting inCartQuantity");
-        const total = 0;
-        const cart = response.data.cart;
-        const hash_table = response.data.hash_table;
-        cart.forEach((item) => {
-          total += item.quantity * hash_table[item.product];
-        });
-        setTotalPrice(total);
-      } else {
-        console.error(
-          "Fail in getting inCartQuantity: ",
-          response.data.message
-        );
-      }
-    } catch (err) {
-      console.error("Error in getting inCartQuantity: ", err.message);
-    }
-  };
+  //     if (response.data.success) {
+  //       console.log("Success in getting inCartQuantity");
+  //       const total = 0;
+  //       const cart = response.data.cart;
+  //       const hash_table = response.data.hash_table;
+  //       cart.forEach((item) => {
+  //         total += item.quantity * hash_table[item.product];
+  //       });
+  //       setTotalPrice(total);
+  //     } else {
+  //       console.error(
+  //         "Fail in getting inCartQuantity: ",
+  //         response.data.message
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.error("Error in getting inCartQuantity: ", err.message);
+  //   }
+  // };
 
   if (isMobile) {
     return (

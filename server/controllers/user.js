@@ -109,7 +109,6 @@ export const addProduct = async (req, res) => {
 };
 
 export const increaseProduct = async (req, res) => {
-  console.log("here")
   try {
     const product = await Product.findById(req.params?.id);
     const user = await User.findById(req.body.userID);

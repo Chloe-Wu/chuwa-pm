@@ -10,7 +10,8 @@ import NotFound from "./pages/NotFound.jsx";
 
 import ProductDetail from './pages/ProductDetail.jsx';
 import ProductInList from './pages/ProductInList.jsx';
-
+import ProductList from './pages/ProductList.jsx';
+import Cart from './pages/Cart.jsx';
 
 import { ChakraProvider, extendBaseTheme, theme as chakraTheme } from '@chakra-ui/react'
 
@@ -37,7 +38,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<ProductList />} />
           <Route path="/main" element={<Main />}/>
           <Route path="/updatePassword" element={<UpdatePassword />} />
           <Route path="/login" element={<Login />} />

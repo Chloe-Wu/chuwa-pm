@@ -86,7 +86,7 @@ function ProductDetailPage() {
                 if (response.data.success) {
                     const cart = response.data.cart;
                     cart.forEach((item) => {
-                        if (item.product === product_id) {
+                        if (item.product.toString() === product_id) {
                             setQuantity(item.quantity);
                             console.log("Success in getting inCartQuantity");
                         }

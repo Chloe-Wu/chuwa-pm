@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function ProductInList({ product_id }) {
+function ProductInList({ product, handleAddToCart }) {
     const user_token = useSelector((state) => state.user.token);
+
+    const product_id = product._id.toString();
 
     const [productID, setProductID] = useState(product_id);
     const [imageURL, setImageURL] = useState("");

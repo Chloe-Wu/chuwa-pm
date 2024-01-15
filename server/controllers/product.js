@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 
+
 export const createProduct = async (req, res) => {
   try {
     const { name } = req.body;
@@ -23,6 +24,7 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 
 export const updateProduct = async (req, res) => {
   try {
@@ -87,54 +89,60 @@ export const getOneProduct = async (req, res) => {
 
 export const getProductList = async (req, res) => {
   try {
-    // Query for the products by sort method and page number
-    const { sort_by: sortBy, page, perPage } = req.query;
+    const { sort_by: sortBy, page, perPage, search } = req.query;
+    // console.log('Received Search Term:', search);
     const skipItems = (page - 1) * perPage;
-    var products;
-    const queryProducts = async (sort, skip, limit) => {
-      return await Product.find()
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-        .select("name price quantity imageUrl")
-        .exec();
-    };
+
+    let query = Product.find();
+
+    // Apply sorting based on sortBy parameter
     switch (sortBy) {
       case "price_high":
-        products = await queryProducts({ price: -1 }, skipItems, perPage);
+        query = query.sort({ price: -1 });
         break;
       case "price_low":
-        products = await queryProducts({ price: 1 }, skipItems, perPage);
+        query = query.sort({ price: 1 });
         break;
       default:
-        // Sort by last_added
-        products = await queryProducts({ updateTime: -1 }, skipItems, perPage);
-    }
-    // Get total number of pages
-    const documentCount = await Product.countDocuments();
-    const pages = Math.max(Math.ceil(documentCount / perPage), 1);
-    // Not login, return products
-    const { userID } = req.body;
-    const login = userID ? true : false;
-    if (!userID) {
-      return res.status(200).json({ success: true, pages, products, login});
+        query = query.sort({ updateTime: -1 });
     }
 
-    // User is login, add cart information
+    // Apply search filter if search term is provided
+    if (search) {
+      // query = query.regex("name", new RegExp(search, "i"));
+      const search = req.query.search;
+      // console.log('Search Term:', search);
+
+      query = query.regex("name", new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "i"));
+
+    }
+
+    const products = await query
+        .skip(skipItems)
+        .limit(perPage)
+        .select("name price quantity imageUrl")
+        .exec();
+
+    const documentCount = await Product.countDocuments();
+    const pages = Math.max(Math.ceil(documentCount / perPage), 1);
+
+    const { userID } = req.body;
+    const login = userID ? true : false;
+
+    if (!userID) {
+      return res.status(200).json({ success: true, pages, products, login });
+    }
+
     const user = await User.findById(userID);
     const cart = user.cart;
-    products = products.map((product) => {
-      // If product is in cart, check if quantity is still available
-      const target = cart.find(
-        (item) => item.product.toString() === product.id
-      );
+    const updatedProducts = products.map((product) => {
+      const target = cart.find((item) => item.product.toString() === product.id);
       if (target) {
         const productQuantity = Math.min(target.quantity, product.quantity);
         const inCart = {
           status: target.quantity === productQuantity,
           quantity: productQuantity,
         };
-        // Update quantity in cart, if product out of stock, remove from cart
         if (productQuantity === 0) {
           cart.splice(cart.indexOf(target), 1);
         } else {
@@ -144,11 +152,12 @@ export const getProductList = async (req, res) => {
       }
       return product._doc;
     });
-    // Save user cart
+
     await user.save();
-    res.status(200).json({ success: true, pages, products, login });
+    res.status(200).json({ success: true, pages, products: updatedProducts, login });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+

@@ -1,0 +1,66 @@
+.frame {
+    width: 270px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+    box-shadow: 0 0 5px 0 rgba(128, 127, 127, 0.2);
+}
+
+
+/* Image */
+.frame .image {
+    margin: 10px;
+    height: 200px;
+    width: 240px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image .image-src {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Name */
+.frame .name {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    height: 65px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* Price */
+.frame .price {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    height: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+
+/* Button */
+.frame .buttons {
+    margin-top: 18px;
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttons .button1 {
+    width: 42%;
+}
+.buttons .button2 {
+    width: 42%;
+}

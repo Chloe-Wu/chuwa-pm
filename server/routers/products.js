@@ -17,4 +17,7 @@ productRouter.post("/create_product", adminAuth, createProduct);
 
 productRouter.post("/update_product/:id", adminAuth, updateProduct);
 
+
+
+
 export default productRouter;

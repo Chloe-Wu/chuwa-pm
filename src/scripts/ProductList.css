@@ -1,0 +1,178 @@
+/* ProductListStyle.css */
+
+
+.top-bar {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 80px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+
+#search-box {
+    display: flex;
+    flex-grow: 1;
+    margin-right: 200px;
+    margin-left: 200px;
+
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+
+.sign-in-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+
+/* 商品网格样式 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+.product-card {
+    background-color: white;
+    border: 2px solid grey;
+    padding: 5px;
+    text-align: center;
+    margin: 10px;
+    width: 80%;
+    position: relative;
+}
+
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.product-card button:hover {
+    background-color: #0056b3;
+}
+
+/* 分页按钮样式 */
+.pagination {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.pagination button {
+    background-color: white;
+    border: 1px solid #ccc;
+    color: black;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.pagination button.active {
+    background-color: black;
+    color: white;
+}
+
+
+.user-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.user-buttons button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.user-buttons .username {
+    margin-right: 10px;
+    color: white;
+}
+
+.sort-dropdown {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    width: 200px;
+    margin-left: 170px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.sort-dropdown label {
+    color: white;
+    margin-right: 5px;
+}
+
+.sort-dropdown select {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 120%; /* 增加字体大小 */
+    text-align: center; /* 居中对齐文本 */
+    background-color: #f0f0f0; /* 设置背景颜色 */
+    cursor: pointer; /* 修改鼠标悬停效果 */
+}
+
+/* 自定义下拉框悬停样式 */
+.sort-dropdown select:hover {
+    background-color: #ccc; /* 悬停时的背景颜色 */
+}
+
+
+#cartbutton{
+    color: white;
+}
+

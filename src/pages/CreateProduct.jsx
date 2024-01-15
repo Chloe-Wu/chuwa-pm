@@ -22,7 +22,7 @@ const CreateProduct = () => {
         proImg,
       };
 
-      try{
+      try {
         const response = await fetch("/api/add_product/",{
             method:"POST",
             headers:{

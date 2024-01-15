@@ -2,6 +2,32 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 
+export const getUserProps = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    const table = {
+      email: user.email,
+      password: user.password,
+      admin: user.admin,
+      cart: user.cart,
+    };
+    console.log("Returning a user table");
+    res.status(201).json({ success: true, message: "User props getting", table});
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
+
+export const getUserIsAdmin = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userID);
+    // console.log("Returning if a user is admin");
+    res.status(201).json({ success: true, message: "User admin getting", admin: user.admin});
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
+
 export const userSignUp = async (req, res) => {
   try {
     const { email, password, admin } = req.body;
@@ -65,11 +91,11 @@ export const addProduct = async (req, res) => {
     const user = await User.findById(req.body.userID);
     const cart = user.cart;
     // Prevent hack: check if product already exists in cart
-    if (cart && cart.some((item) => item.product.toString() === product.id)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Product already exists in cart" });
-    }
+    // if (cart && cart.some((item) => item.product.toString() === product.id)) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Product already exists in cart" });
+    // }
     // Add product into cart
     const target = { product: product.id, quantity: 1 };
     const status =
@@ -179,6 +205,12 @@ export const getUserCart = async (req, res) => {
       })
     );
     const success = valid.every((isValid) => isValid);
+    // Remove products that are out of stock
+    if (!success) {
+      user.cart = cart.filter((product) => {
+        return product.quantity > 0;
+      });
+    }
     // Remove products that are out of stock
     if (!success) {
       user.cart = cart.filter((product) => {

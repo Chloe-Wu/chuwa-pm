@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    height: 80px;
 }
 
 .logo {
@@ -58,7 +59,7 @@ button {
 .product-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0px;
+    gap: 5px;
     margin-left: 200px;
     margin-right: 200px;
 }
@@ -100,7 +101,7 @@ button {
 /* 分页按钮样式 */
 .pagination {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .pagination button {
@@ -145,8 +146,8 @@ button {
     padding: 5px;
     width: 200px;
     margin-left: 170px;
-
-
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .sort-dropdown label {

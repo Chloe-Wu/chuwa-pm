@@ -3,11 +3,12 @@ import React, { useState, useEffect } from "react";
 import * as jwt_decode from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation
 import axios from "axios";
-import "../ProductListStyle.css";
+import "../scripts/ProductList.css";
 import Cart from "./Cart.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProductInList from "./ProductInList.jsx"; 
+import Footer from "../components/Framework/Footer.jsx";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -71,7 +72,7 @@ const ProductList = () => {
           sortValue = "updateTime";
       }
 
-      const response = await axios.get("/api/products", {
+      const response = await axios.get("http://localhost:3000/api/products", {
         params: {
           sort_by: sortValue,
           page: currentPage,
@@ -109,13 +110,16 @@ const ProductList = () => {
     // }
   }, [currentPage, sortBy, searchTerm]);
 
+
+  // const getProductID = (product_id)
+
   const handleAddToCart = async (productId) => {
     console.log("current product id " + productId);
     console.log("the token is " + userToken);
     try {
       if (user) {
         const response = await axios.post(
-          `/api/user_add_product/${productId}`, {},
+          `http://localhost:3000/api/user_add_product/${productId}`, {},
           {
             headers: {
               "Content-Type": "application/json",
@@ -143,7 +147,7 @@ const ProductList = () => {
   return (
     <div>
       <div className="top-bar">
-        <div className="logo">Chuwa Shop</div>
+        <div className="logo">Management</div>
         <div id="search-box">
           <input
             type="text"
@@ -201,7 +205,6 @@ const ProductList = () => {
             {
               products.map((product, idx) => (
                   <ProductInList key={idx} product={product} handleAddToCart={handleAddToCart}/>
-
               ))
             
             
@@ -235,6 +238,7 @@ const ProductList = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

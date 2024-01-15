@@ -90,7 +90,7 @@ export const getOneProduct = async (req, res) => {
 export const getProductList = async (req, res) => {
   try {
     const { sort_by: sortBy, page, perPage, search } = req.query;
-    console.log('Received Search Term:', search);
+    // console.log('Received Search Term:', search);
     const skipItems = (page - 1) * perPage;
 
     let query = Product.find();
@@ -111,7 +111,7 @@ export const getProductList = async (req, res) => {
     if (search) {
       // query = query.regex("name", new RegExp(search, "i"));
       const search = req.query.search;
-      console.log('Search Term:', search);
+      // console.log('Search Term:', search);
 
       query = query.regex("name", new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "i"));
 

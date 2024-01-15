@@ -1,32 +1,35 @@
-import PropTypes from "prop-types";
-import React, { useMemo } from "react";
+// import PropTypes from "prop-types";
+import React, { useMemo, useState } from "react";
 import "../../scripts/Framework/Header.css";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { Search2Icon } from "@chakra-ui/icons";
-import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { logOutUser } from "../../slices/userSlice";
+// import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+// import { Search2Icon } from "@chakra-ui/icons";
+// import axios from "axios";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { useSelector, useDispatch } from "react-redux";
+// import { Link } from "react-router-dom";
+// import { logOutUser } from "../../slices/userSlice";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { is } from "@babel/types";
+// import { is } from "@babel/types";
 
 function Header() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  const [loading, setLoading] = React.useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [totalPrice, setTotalPrice] = useState(0);
 
   const isMobile = useMediaQuery("(max-width: 450px)");
 
-  const handleSignOut = () => {
-    dispatch(logOutUser());
-    navigate("/login");
-  };
+  // const user_token = useSelector((state) => state.user.token);
 
-  const intoCart = () => {
-    navigate("/user-cart");
-  };
+  // const handleSignOut = () => {
+  //   dispatch(logOutUser());
+  //   navigate("/login");
+  // };
+
+  // const intoCart = () => {
+  //   navigate("/user-cart");
+  // };
 
   const logoLeftStyle = useMemo(
     () => ({
@@ -49,33 +52,34 @@ function Header() {
     [isMobile]
   );
 
-  const calculatePrice = async () => {
-    try {
-      const response = await axios.get("/api/user_cart", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  // const calculatePrice = async () => {
+  //   try {
+  //     const response = await axios.get("/api/user_cart", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': `${user_token}`,
+  //       },
+  //     });
 
-      if (response.data.success) {
-        console.log("Success in getting inCartQuantity");
-        const total = 0;
-        const cart = response.data.cart;
-        const hash_table = response.data.hash_table;
-        cart.forEach((item) => {
-          total += item.quantity * hash_table[item.product];
-        });
-        return total;
-      } else {
-        console.error(
-          "Fail in getting inCartQuantity: ",
-          response.data.message
-        );
-      }
-    } catch (err) {
-      console.error("Error in getting inCartQuantity: ", err.message);
-    }
-  };
+  //     if (response.data.success) {
+  //       console.log("Success in getting inCartQuantity");
+  //       const total = 0;
+  //       const cart = response.data.cart;
+  //       const hash_table = response.data.hash_table;
+  //       cart.forEach((item) => {
+  //         total += item.quantity * hash_table[item.product];
+  //       });
+  //       setTotalPrice(total);
+  //     } else {
+  //       console.error(
+  //         "Fail in getting inCartQuantity: ",
+  //         response.data.message
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.error("Error in getting inCartQuantity: ", err.message);
+  //   }
+  // };
 
   if (isMobile) {
     return (
@@ -89,16 +93,15 @@ function Header() {
             </p>
           </div>
 
-          <div className="header-right-mobile">
+          {/* <div className="header-right-mobile">
               <div className="text-wrapper-2" onClick={handleSignOut}>
                 Log out
               </div>
               <div className="text-wrapper-2" onClick={intoCart}>$50</div>
-          </div>
+          </div> */}
         </div>
 
-        <div className="header-mid-mobile">
-          {/* <img className="walmart-logo-web" alt="Walmart logo web" src={walmartLogoWeb} /> */}
+        {/* <div className="header-mid-mobile">
           <div className="search-box-mobile">
             <InputGroup>
               <Input />
@@ -114,7 +117,7 @@ function Header() {
               </InputRightElement>
             </InputGroup>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   } else {
@@ -126,8 +129,7 @@ function Header() {
             <span style={logoRightStyle}>Shopping</span>
           </p>
         </div>
-        <div className="header-mid">
-          {/* <img className="walmart-logo-web" alt="Walmart logo web" src={walmartLogoWeb} /> */}
+        {/* <div className="header-mid">
           <div className="search-box">
             <InputGroup>
               <Input />
@@ -151,9 +153,9 @@ function Header() {
             </div>
           </div>
           <div className="div-3" onClick={intoCart}>
-            <div className="text-wrapper-2">$50</div>
+            <div className="text-wrapper-2">$ {totalPrice}</div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

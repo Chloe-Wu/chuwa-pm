@@ -47,8 +47,8 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                                 product: {
                                     ...item.product,
                                     name: '',
-                                    imageUrl: '', // 默认值
-                                    price: 0 // 默认值
+                                    imageUrl: '',
+                                    price: 0  
                                 }
                             };
                         }

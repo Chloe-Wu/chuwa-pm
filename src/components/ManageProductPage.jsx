@@ -10,33 +10,34 @@ function ManageProductPage() {
   const [imageURL, setImageURL] = useState("");
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(0);
   const [productID, setProductID] = useState("");
+
+  const isMobile = useMediaQuery("(max-width: 450px)")
 
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
 
-  const { product_id } = useParams();
+  const { id } = useParams();
+  // const product_id = '65a191c7b27f060634d9f696';
 
   const user_token = useSelector((state) => state.user.token);
 
-  const isMobile = useMediaQuery("(max-width: 450px)");
-
   useEffect(() => {
     if (currentPath.includes("update-product")) {
-      setProductID(product_id);
+      setProductID(id);
 
       const fetchProduct = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/product/${product_id}`,
+            `http://localhost:3000/api/product/${id}`,
             {
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${user_token}`,
+                Authorization: `${user_token}`,
               },
             }
           );
@@ -84,13 +85,15 @@ function ManageProductPage() {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${user_token}`,
+              Authorization: `${user_token}`,
             },
           }
         );
 
         if (response.data.success) {
           console.log("Product added!");
+          // navigate(`/product-detail/${product_id}`)
+          navigate("/product-list");
         } else if (
           !response.data.success &&
           response.data.message === "Product already exists"
@@ -109,19 +112,19 @@ function ManageProductPage() {
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/update_product/${productID}`,
+          `http://localhost:3000/api/update_product/${id}`,
           formData,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${user_token}`,
+              Authorization: `${user_token}`,
             },
           }
         );
 
         if (response.data.success) {
           console.log("Product updated!");
-          navigate(`/product-detail/${product_id}`);
+          navigate(`/product-detail/${id}`);
         } else {
           console.log(
             "failed to update product data! The reason is: " +
@@ -271,16 +274,7 @@ function ManageProductPage() {
                 <option value="Laptops">Laptops</option>
                 <option value="Clothes">Clothes</option>
               </Select>
-              {/* <select 
-                            className="product-category-input"
-                            placeholder="Select option"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
-                            <option value='option1'>Option 1</option>
-                            <option value='option2'>Option 2</option>
-                            <option value='option3'>Option 3</option>
-                        </select> */}
+
             </div>
             <div className="product-price">
               <h5 className="product-price-title">Price</h5>
@@ -306,14 +300,6 @@ function ManageProductPage() {
             <div className="product-image">
               <h5 className="product-image-title">Add Image Link</h5>
               <div className="product-image-wrap">
-                {/* <input
-                                className="product-image-input"
-                                onChange={handleImgChange}
-                                type="file"
-                                accept="image/*"
-                                aria-describedby="fileInputDescription"
-                                placeholder="http://"
-                            /> */}
                 <input
                   placeholder="https://"
                   className="product-image-input"
@@ -328,7 +314,7 @@ function ManageProductPage() {
             <img
               className="product-detail-image-src"
               src={imageURL}
-              alt="No Image or Error occurs"
+              alt="Error occurs"
             />
           </div>
           <Button

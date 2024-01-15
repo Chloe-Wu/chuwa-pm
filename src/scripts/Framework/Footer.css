@@ -1,96 +1,63 @@
-.footer {
+.footer,
+.footer-mobile {
   background-color: #111827;
-  height: 85px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.footer {
+  height: 85px;
+  justify-content: space-between;
   width: 100%;
+  position: fixed;
+  bottom: 0;
 }
 
 .footer-mobile {
-  background-color: #111827;
-  padding-top: 15px;
-  padding-bottom: 8px;
-  height: 100px;
-  width: 100%;
-  display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 100px;
+  padding: 15px 0 8px;
+  width: 100%;
+  margin-top: auto;
 }
 
-/* .candleaf-all {
-  color: #ffffff;
-  font-family: "Inter-Regular", Helvetica;
-  font-size: 16px;
-  font-weight: 400;
-  left: 5vw;
-  line-height: 10px;
-  position: relative;
-  width: 300px;
-  margin-right: 50px;
-} */
-
-.icon-image-container {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  height: 20px;
-}
-
+.icon-image-container,
 .icon-image-container-mobile {
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  height: 15px;
-  margin-bottom: 10px;
+  gap: 15px;
 }
 
-.social-icons {
+.social-icons,
+.social-icons-mobile {
   position: relative;
   width: 20px;
   height: 20px;
-  top: 0;
-  left: 0;
 }
 
 .social-icons-mobile {
-  position: relative;
   width: 15px;
   height: 15px;
-  top: 0;
-  left: 0;
 }
 
-.group {
-  height: 24px;
-  position: relative;
-  width: fit-content;
-  display: flex;
-  flex-direction: row;
-  gap: 40px;
-  margin-right: 5vw;
-}
-
+.group,
 .group-mobile {
   height: 24px;
   position: relative;
   width: fit-content;
   display: flex;
-  flex-direction: row;
-  gap: 30px;
+  gap: 40px;
+  margin-right: 5vw;
 }
 
-/* .text-wrapper {
-  color: #ffffff;
-  font-family: "Inter-Medium", Helvetica;
-  font-size: 16px;
-  font-weight: 500;
-  left: 0;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-} */
+.group-mobile {
+  gap: 30px;
+  margin-top: 8px;
+}
+
+@media (max-width: 450px) {
+  .group {
+    margin-right: 0;
+  }
+}

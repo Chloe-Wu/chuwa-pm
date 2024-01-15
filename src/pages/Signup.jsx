@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import AuthForm from "../components/AuthForm/AuthForm";
 import { signUpUser } from '../slices/userSlice';
 
+import Header from '../components/Framework/Header';
+import Footer from "../components/Framework/Footer";
+
 export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,7 +18,9 @@ export default function Signup() {
   
   return (
     <div>
+      <Header/>
       <AuthForm onAuthSubmit={handleAuthSubmit} scenario='signup'/>
+      <Footer/>
     </div>
   );
 }

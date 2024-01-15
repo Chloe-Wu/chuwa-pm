@@ -57,7 +57,7 @@ function Footer() {
     );
   } else {
     return (
-      <div className="footer">
+      <footer className="footer">
         <div style={{...textStyle, marginLeft: '5vw'}}>©2024 All Rights Reserved.</div>
         <div className="icon-image-container">
           <img
@@ -86,7 +86,7 @@ function Footer() {
           <div style={textStyle}>Privacy Policies</div>
           <div style={textStyle}>Help</div>
         </div>
-      </div>
+      </footer>
     );
   }
 }

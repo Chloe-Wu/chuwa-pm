@@ -4,12 +4,15 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, ButtonGroup, Flex } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 function ProductDetailPage() {
   const navigate = useNavigate();
   const user_token = useSelector((state) => state.user.token);
 
   // const product_id = "65a1929cb27f060634d9f697";
+
+  const isMobile = useMediaQuery("(max-width: 450px)");
 
   const { id } = useParams();
 
@@ -153,7 +156,8 @@ function ProductDetailPage() {
   const userIncreaseProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_increase_product/${id}`, {},
+        `http://localhost:3000/api/user_increase_product/${id}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +196,8 @@ function ProductDetailPage() {
   const userDecreaseProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_decrease_product/${id}`, {},
+        `http://localhost:3000/api/user_decrease_product/${id}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -234,7 +239,8 @@ function ProductDetailPage() {
   const addProduct = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user_add_product/${id}`, {},
+        `http://localhost:3000/api/user_add_product/${id}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -288,11 +294,12 @@ function ProductDetailPage() {
       console.error("Error for removing the product:", error.message);
     }
   };
+  
 
   return (
     <div className="product-detail-page">
-      <div className="product-detail-title">Product Detail</div>
-      <div className="box">
+      <div className={`product-detail-title${isMobile ? "-mobile" : ""}`}>Product Detail</div>
+      <div className={`box${isMobile ? "-mobile" : ""}`}>
         <div className="product-detail-image">
           <img
             className="product-detail-image-src"
@@ -300,10 +307,10 @@ function ProductDetailPage() {
             alt="No Image or Error occurs"
           />
         </div>
-        <div className="product-detail-information">
+        <div className={`product-detail-information${isMobile ? "-mobile" : ""}`}>
           <div className="product-detail-category">{category}</div>
           <div className="product-detail-name">{name}</div>
-          <div className="product-detail-price-ifstock">
+          <div className={`product-detail-price-ifstock${isMobile ? "-mobile" : ""}`}>
             <div className="product-detail-price">${price}</div>
             {initialQuantity > 0 ? (
               <div className="product-detail-ifstock">In stock</div>

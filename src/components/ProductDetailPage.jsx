@@ -6,12 +6,11 @@ import { Button, ButtonGroup, Flex } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-
 function ProductDetailPage() {
     const navigate = useNavigate();
     const user_token = useSelector((state) => state.user.token);
 
-    // const product_id = "65a1929cb27f060634d9f697";
+    // const product_id = '65a191c7b27f060634d9f696';
 
     const { product_id } = useParams();
 
@@ -87,11 +86,11 @@ function ProductDetailPage() {
                 if (response.data.success) {
                     const cart = response.data.cart;
                     cart.forEach((item) => {
-                        if (item.product === productID) {
+                        if (item.product === product_id) {
                             setQuantity(item.quantity);
+                            console.log("Success in getting inCartQuantity");
                         }
                     });
-                    console.log("Success in getting inCartQuantity");
                 } else {
                     console.error('Fail in getting inCartQuantity: ', response.data.message);
                 }
@@ -137,6 +136,7 @@ function ProductDetailPage() {
             const response = await axios.post(`http://localhost:3000/api/user_increase_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user_token}`
                 },
             });
             if (response.data.success) {
@@ -163,6 +163,7 @@ function ProductDetailPage() {
             const response = await axios.post(`http://localhost:3000/api/user_decrease_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user_token}`
                 },
             });
             if (response.data.success) {
@@ -192,6 +193,7 @@ function ProductDetailPage() {
             const response = await axios.post(`http://localhost:3000/api/user_add_product/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user_token}`
                 },
             });
             if (response.data.success) {
@@ -221,6 +223,7 @@ function ProductDetailPage() {
             const response = await axios.delete(`http://localhost:3000/api/user_remove/${productID}`, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user_token}`
                 },
             });
             if (response.data.success) {

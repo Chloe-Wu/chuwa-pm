@@ -4,10 +4,11 @@ import "../../scripts/Framework/Header.css";
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { Search2Icon } from '@chakra-ui/icons'
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logOutUser } from "../../slices/userSlice";
+import { useState, useEffect } from 'react';
 
 
 
@@ -15,10 +16,19 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = React.useState(false);
+  const { product_id } = useParams();
+
+  const [loading, setLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(null);
+
+  const user_token = useSelector((state) => state.user.token);
+  const user_id = useSelector((state) => state.user.id);
 
   const handleSignOut = () => {
     dispatch(logOutUser());
+    console.log("Sign out");
+    console.log("User token: ", user_token);
+    console.log("User id: ", user_id);
     navigate('/login');
   }
 
@@ -26,11 +36,16 @@ function Header() {
     navigate('/user-cart');
   }
 
+  // const createProduct = () => {
+  //   navigate('/create-product');
+  // };
+
   const calculatePrice = async () => {
     try {
       const response = await axios.get("/api/user_cart", {
           headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user_token}`
           },
       });
 
@@ -42,7 +57,7 @@ function Header() {
           cart.forEach((item) => {
               total += item.quantity * hash_table[item.product];
           }); 
-          return total;
+          setTotalPrice(total);
       } else {
           console.error('Fail in getting inCartQuantity: ', response.data.message);
       }
@@ -50,6 +65,11 @@ function Header() {
         console.error('Error in getting inCartQuantity: ', err.message);
     }
   };
+
+
+  useEffect(() => {
+    calculatePrice();
+  }, []); 
 
 
   return (
@@ -84,9 +104,9 @@ function Header() {
             Log out
           </div> 
         </div>
-        <div className="div-3" onClick={intoCart}>
-          <div className="text-wrapper-2">$50</div>
-        </div>
+        {user_token != null && <div className="div-3" onClick={intoCart}>
+          <div className="text-wrapper-2">${totalPrice}</div>
+        </div>}
       </div>
     </div>
   );

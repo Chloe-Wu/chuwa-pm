@@ -17,12 +17,11 @@ export default function Login(){
       console.log(user);
 
       if (user.payload.success) {
-        // Successful login, navigate to the home/Product page
         console.log('Successful login');
         console.log(user.payload.id);
         dispatch(setCurrentUser(user.payload.id));
         dispatch(setCurrentToken(user.payload.token));
-        navigate('/product-detail');
+        navigate(`/product-detail/${user.payload.id}`);
         
       } else {
         alert("Invalid username or password");

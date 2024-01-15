@@ -9,9 +9,9 @@ function ManageProductPage() {
     const [imageURL, setImageURL] = useState("");
     const [category, setCategory] = useState("");
     const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
-    const [quantity, setQuantity] = useState("");
+    const [quantity, setQuantity] = useState(0);
     const [productID, setProductID] = useState("");
 
     const location = useLocation();
@@ -19,6 +19,7 @@ function ManageProductPage() {
     const navigate = useNavigate();
 
     const { product_id } = useParams();
+    // const product_id = '65a191c7b27f060634d9f696';
 
     const user_token = useSelector((state) => state.user.token);
     
@@ -82,7 +83,9 @@ function ManageProductPage() {
                 });
         
                 if (response.data.success) {
-                    console.log("Product added!")
+                    console.log("Product added!");
+                    // navigate(`/product-detail/${product_id}`)
+                    navigate('/product-list');
                 } else if (!response.data.success && response.data.message === "Product already exists" ) {
                     console.error('Fail in adding the product: ', response.data.message);
                     alert("Product already exists");
@@ -106,7 +109,7 @@ function ManageProductPage() {
         
                 if(response.data.success){
                     console.log("Product updated!");
-                    navigate(`/product-detail/${product_id}`)
+                    navigate(`/product-detail/${product_id}`);
                 }else{
                     console.log("failed to update product data! The reason is: " + response.data.message)
                 }
@@ -120,7 +123,7 @@ function ManageProductPage() {
     return (
         <div className="manage-product-page">
             <div className="manage-page-title">
-                {currentPath.includes("create_product") ? "Create Product" : "Edit Product"}
+                {currentPath.includes("create-product") ? "Create Product" : "Edit Product"}
             </div>
             <div className="box">
                 <div className="product-name">
@@ -220,7 +223,7 @@ function ManageProductPage() {
                         colorScheme='teal'
                         onClick={submitProduct}
                     >
-                        {currentPath.includes("create_product") ? "Add Product" : "Edit Product"}
+                        {currentPath.includes("create-product") ? "Add Product" : "Edit Product"}
                     </Button>
             </div>
         </div>

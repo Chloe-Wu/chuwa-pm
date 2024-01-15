@@ -233,40 +233,40 @@ function Header() {
     [isMobile]
   );
 
-  useEffect(() => {
-    if (user_token != null) {
-      const calculatePrice = async () => {
-        try {
-          const response = await axios.get("/api/user_cart", {
-            headers: {
-              "Content-Type": "application/json",
-              'Authorization': `${user_token}`,
-            },
-          });
+  // useEffect(() => {
+  //   if (user_token != null) {
+  //     const calculatePrice = async () => {
+  //       try {
+  //         const response = await axios.get("/api/user_cart", {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             'Authorization': `${user_token}`,
+  //           },
+  //         });
     
-          if (response.data.success) {
-            console.log("Success in getting inCartQuantity");
-            const total = 0;
-            const cart = response.data.cart;
-            const hash_table = response.data.hash_table;
-            cart.forEach((item) => {
-              total += item.quantity * hash_table[item.product];
-            });
-            setTotalPrice(total);
-          } else {
-            console.error(
-              "Fail in getting inCartQuantity: ",
-              response.data.message
-            );
-          }
-        } catch (err) {
-          console.error("Error in getting inCartQuantity: ", err.message);
-        }
-      };
+  //         if (response.data.success) {
+  //           console.log("Success in getting inCartQuantity");
+  //           const total = 0;
+  //           const cart = response.data.cart;
+  //           const hash_table = response.data.hash_table;
+  //           cart.forEach((item) => {
+  //             total += item.quantity * hash_table[item.product];
+  //           });
+  //           setTotalPrice(total);
+  //         } else {
+  //           console.error(
+  //             "Fail in getting inCartQuantity: ",
+  //             response.data.message
+  //           );
+  //         }
+  //       } catch (err) {
+  //         console.error("Error in getting inCartQuantity: ", err.message);
+  //       }
+  //     };
 
-      calculatePrice();
-    }
-  }, []);
+  //     calculatePrice();
+  //   }
+  // }, []);
 
   if (isMobile) {
     return (
@@ -288,7 +288,7 @@ function Header() {
           </div> */}
         </div>
 
-        <div className="header-mid-mobile">
+        {/* <div className="header-mid-mobile">
           <div className="search-box-mobile">
             <InputGroup>
               <Input />
@@ -316,7 +316,7 @@ function Header() {
             <span style={logoRightStyle}>Shopping</span>
           </p>
         </div>
-        <div className="header-mid">
+        {/* <div className="header-mid">
           <div className="search-box">
             <InputGroup>
               <Input />
@@ -332,8 +332,8 @@ function Header() {
               </InputRightElement>
             </InputGroup>
           </div>
-        </div>
-        <div className="header-right">
+        </div> */}
+        {/* <div className="header-right">
           {user_token != null ? 
             (<div className="div-3">
               <div className="text-wrapper-2" onClick={handleSignOut}>
@@ -349,7 +349,7 @@ function Header() {
           {user_token != null && <div className="div-3" onClick={intoCart}>
             <div className="text-wrapper-2">$ {totalPrice}</div>
           </div>}
-        </div>
+        </div> */}
       </div>
     );
   }

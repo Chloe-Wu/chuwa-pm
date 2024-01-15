@@ -4,7 +4,8 @@ import './index.css';
 import App from './App.js';
 import reportWebVitals from './reportWebVitals.js';
 import { Provider } from "react-redux";
-import store from "./slices/store.jsx";
+import {store, persistor} from "./slices/store.jsx";
+import { PersistGate } from 'redux-persist/es/integration/react.js';
 import { jwtDecode } from "jwt-decode";
 // import { setCurrentUser } from './slices/userSlice.jsx';
 
@@ -16,7 +17,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+         <App />
+      </PersistGate>
     </Provider>
 );
 

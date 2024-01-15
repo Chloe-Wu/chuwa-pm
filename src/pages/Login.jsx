@@ -19,8 +19,10 @@ export default function Login(){
       if (user.payload.success) {
         // Successful login, navigate to the home/Product page
         console.log('Successful login');
-        console.log(user.payload.id);
-        console.log(user.payload.token);
+        // console.log('user',user);
+        // console.log(user.payload.id);
+        // console.log(user.payload.token);
+        // console.log(user.payload.admin);
 
         dispatch(setCurrentUser(user.payload.id));
         dispatch(setCurrentToken(user.payload.token));

@@ -8,6 +8,7 @@ import Cart from "./Cart.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProductInList from "./ProductInList.jsx"; 
+import Footer from "../components/Framework/Footer.jsx";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -235,6 +236,7 @@ const ProductList = () => {
           </div>
         </div>
       )}
+      <Footer/>
     </div>
   );
 };

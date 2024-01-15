@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import "../../scripts/Framework/Header.css";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
@@ -15,9 +15,12 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const isMobile = useMediaQuery("(max-width: 450px)");
+
+  const user_token = useSelector((state) => state.user.token);
 
   const handleSignOut = () => {
     dispatch(logOutUser());
@@ -54,6 +57,7 @@ function Header() {
       const response = await axios.get("/api/user_cart", {
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `${user_token}`,
         },
       });
 
@@ -65,7 +69,7 @@ function Header() {
         cart.forEach((item) => {
           total += item.quantity * hash_table[item.product];
         });
-        return total;
+        setTotalPrice(total);
       } else {
         console.error(
           "Fail in getting inCartQuantity: ",
@@ -151,7 +155,7 @@ function Header() {
             </div>
           </div>
           <div className="div-3" onClick={intoCart}>
-            <div className="text-wrapper-2">$50</div>
+            <div className="text-wrapper-2">$ {totalPrice}</div>
           </div>
         </div>
       </div>

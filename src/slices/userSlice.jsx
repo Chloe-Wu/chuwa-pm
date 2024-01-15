@@ -10,6 +10,7 @@ export const authUser = createAsyncThunk(
       const user = await signIn(data);
       console.log('User data after signin:', user);
       localStorage.setItem('token', user.token);
+      localStorage.setItem('user', user.id);
       console.log('Token has been saved to localStorage');
       thunkAPI.dispatch(removeError());
       return user;
@@ -64,6 +65,7 @@ const currentUserSlice = createSlice({
             state.id = null;
             state.status = 'idle';
             localStorage.removeItem('token');
+            localStorage.removeItem("user");
             state.token = null;
         }
     },

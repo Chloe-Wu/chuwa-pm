@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import * as jwt_decode from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation
 import axios from "axios";
@@ -18,6 +19,13 @@ const ProductList = () => {
   const [user, setUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  // const userId = useSelector(state => state.user.payload ? state.user.payload.id : null);
+  // const userToken = useSelector(state => state.user.payload ? state.user.payload.token : null);
+  const userId = useSelector((state) => state.user ? state.user.id : null);
+  const userToken = useSelector((state) => state.user ? state.user.token : null);
+  // console.log("the user id is " + userId);
+  // console.log("the token is " + userToken);
+
 
   const location = useLocation();
   // console.log(user.email); // Access email
@@ -26,9 +34,19 @@ const ProductList = () => {
   // console.log(user.password);
 
   // const user_token = useSelector((state) => state.user.token);
-  const user_token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjU4MTdkMjBiMTkyNmE5ZTVjMzQ3ZTUwIiwiYWRtaW4iOnRydWV9LCJpYXQiOjE3MDUyNzM0MjMsImV4cCI6MTcwNTM1OTgyM30.0vsnosASdIHQkc1TrtjyAhMnDLIABWRUnxaOWbSRxqw";
-  // console.log(user_token)
+  // const user_token =
+  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjU4MTdkMjBiMTkyNmE5ZTVjMzQ3ZTUwIiwiYWRtaW4iOnRydWV9LCJpYXQiOjE3MDUyNzM0MjMsImV4cCI6MTcwNTM1OTgyM30.0vsnosASdIHQkc1TrtjyAhMnDLIABWRUnxaOWbSRxqw";
+  // // console.log(user_token)
+
+  const handleUpdateCart = (updatedCart) => {
+    // 在这里执行更新购物车的操作，可以将新的购物车数据存储在状态中
+    // 更新购物车后，调用该函数来更新购物车
+  };
+
+  const handleRemoveFromCart = (productId, updatedCart) => {
+    // 在这里执行从购物车中删除商品的操作，可以将新的购物车数据存储在状态中
+    // 删除商品后，调用该函数来更新购物车
+  };
 
   const handleSignOut = () => {
     console.log("logged out");
@@ -64,11 +82,12 @@ const ProductList = () => {
         },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user_token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
 
       console.log(response.data)
+      // console.log("User object in fetchProducts:", user.id);
 
       setUser(response.data.login)
       setProducts(response.data.products);
@@ -82,6 +101,9 @@ const ProductList = () => {
 
   useEffect(() => {
     fetchProducts();
+
+
+
     // Check if there's user data in localStorage and set it to state
     // const savedUser = localStorage.getItem("user");
     // if (savedUser) {
@@ -90,20 +112,16 @@ const ProductList = () => {
   }, [currentPage, sortBy, searchTerm]);
 
   const handleAddToCart = async (productId) => {
-    console.log(productId);
+    console.log("current product id " + productId);
+    console.log("the token is " + userToken);
     try {
       if (user) {
-        // const userToken = localStorage.getItem("token");
-        // console.log(userToken);
-        // const decodedToken = jwt_decode(userToken);
-
-        // console.log("decoded: " + decodedToken);
         const response = await axios.post(
-          `/api/user_add_product/${productId}`,
+          `/api/user_add_product/${productId}`, {},
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${user_token}`,
+              Authorization: `Bearer ${userToken}`,
             },
           }
         );
@@ -139,7 +157,7 @@ const ProductList = () => {
         <div className="user-buttons">
           {user ? (
             <div className="user-dropdown">
-              <div className="user-name">{user.email}</div>
+              <div className="user-name">{userId}</div>
               <button onClick={handleSignOut}>Sign Out</button>
             </div>
           ) : (
@@ -149,15 +167,21 @@ const ProductList = () => {
         <div className="cart-button">
           {user && (
             <button id="cartbutton" onClick={() => setIsCartOpen(!isCartOpen)}>
+
               Cart
             </button>
           )}
         </div>
+
         <Cart
-          isOpen={isCartOpen}
-          closeCart={() => setIsCartOpen(false)}
-          cartItems={cartItems}
+            userId={userId}
+            userToken={userToken}
+            isOpen={isCartOpen}
+            onClose={() => setIsCartOpen(false)}
+            onUpdateCart={handleUpdateCart}
+            onRemoveFromCart={handleRemoveFromCart}
         />
+
       </div>
       <div className="sort-dropdown">
         <label htmlFor="sort-by">Sort by:</label>
@@ -178,7 +202,8 @@ const ProductList = () => {
           <div className="product-grid">
             {
               products.map((product, idx) => (
-              <ProductInList key={idx} product={product}/>
+                  <ProductInList key={idx} product={product} handleAddToCart={handleAddToCart}/>
+
               ))
             
             

@@ -1,35 +1,112 @@
 import React, { useState, useEffect } from 'react';
 import '../Cart.css';
-
-const Cart = ({ user, onClose, onUpdateCart, onRemoveFromCart, isOpen }) => {
-    const [cart, setCart] = useState(user ? user.cart : []);
+import axios from 'axios';
+const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOpen }) => {
+    const [cart, setCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    // console.log("Cart component received user data:", user.id);
+    // console.log("Cart component cart data:", cart);
 
     useEffect(() => {
+        // 在组件加载时获取购物车数据
+        fetchCartData();
+    }, [userId, userToken]);
+
+    const fetchCartData = async () => {
+        try {
+            if (userId && userToken) {
+                // 使用 userId 和 userToken 发送请求获取购物车数据
+                const response = await axios.get('/api/user_cart', {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+
+                if (response.data.success) {
+                    console.log("Cart Data from API:", response.data);
+                    const updatedCart = await Promise.all(response.data.cart.map(async (item) => {
+                        // 调用获取产品详细信息的函数，传入产品ID
+                        console.log("当前商品的id: " + item._id);
+
+                        try {
+                            const productDetails = await fetchProductDetails(item._id);
+
+                            // 将获取的产品详细信息合并到购物车项中
+                            return {
+                                ...item,
+                                product: {
+                                    ...item.product,
+                                    imageUrl: item.imageUrl, // 添加图像URL属性
+                                    price: item.price // 添加价格属性
+                                }
+                            };
+                        } catch (error) {
+                            console.error('Error fetching product details:', error);
+                            // 如果出现错误，可以返回一个默认值或空对象
+                            return {
+                                ...item,
+                                product: {
+                                    ...item.product,
+                                    imageUrl: '', // 默认值
+                                    price: 0 // 默认值
+                                }
+                            };
+                        }
+                    }));
+
+                    setCart(updatedCart);
+                    updateTotalPrice(updatedCart);
+
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching cart data:', error);
+        }
+    };
+    const fetchProductDetails = async (productId) => {
+        try {
+            // 使用产品ID向后端发送请求获取产品详细信息
+            console.log("这是当前的" + productId);
+            const response = await axios.get(`/api/product/${productId}`);
+
+            if (response.data.success) {
+                console.log("success get the id");
+                console.log("ProductdeTails: " + response.data.productDetails);
+                return response.data.productDetails;
+
+            }
+        } catch (error) {
+            console.error('Error fetching product details:', error);
+        }
+        // 如果获取失败或发生错误，可以返回默认值或空对象
+        return { imageUrl: '', price: 0 };
+    };
+    const updateTotalPrice = (cartData) => {
         let total = 0;
-        for (const item of cart) {
-            total += item.product.price * item.quantity;
+        for (const item of cartData) {
+            total += item.price * item.quantity;
         }
         setTotalPrice(total);
-    }, [cart]);
+    };
 
     const handleUpdateQuantity = (productId, newQuantity) => {
-
-        const updatedCart = cart.map((item) =>
-            item.product._id === productId
-                ? { ...item, quantity: newQuantity }
-                : item
-        );
+        const updatedCart = cart.map((item) => {
+            if (item._id === productId) {
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        });
         setCart(updatedCart);
         onUpdateCart(updatedCart);
     };
 
     const handleRemoveFromCart = (productId) => {
-        //remove items from cart
-        const updatedCart = cart.filter((item) => item.product._id !== productId);
+        // Remove items from cart
+        const updatedCart = cart.filter((item) => item._id !== productId);
         setCart(updatedCart);
         onRemoveFromCart(productId, updatedCart);
     };
+
 
     return (
         <div className="cart-container" style={{ right: isOpen ? 0 : -400 }}>
@@ -39,24 +116,26 @@ const Cart = ({ user, onClose, onUpdateCart, onRemoveFromCart, isOpen }) => {
             </div>
             <div className="cart-items">
                 {cart.map((item) => (
-                    <div key={item.product._id} className="cart-item">
+                    <div key={item._id} className="cart-item">
                         <div className="item-details">
+                            {console.log("Product Image URL:", item.imageUrl)}
                             <img src={item.product.imageUrl} alt={item.product.name} />
                             <div>
-                                <h3>{item.product.name}</h3>
-                                <p>Price: ${item.product.price.toFixed(2)}</p>
+                                <h3>{item.name}</h3>
+                                <p>Price: ${item.price ? item.price.toFixed(2) : 'N/A'}</p>
+
                             </div>
                         </div>
                         <div className="item-actions">
                             <button
-                                onClick={() => handleUpdateQuantity(item.product._id, item.quantity - 1)}
+                                onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
                                 disabled={item.quantity === 1}
                             >
                                 -
                             </button>
                             <span>{item.quantity}</span>
-                            <button onClick={() => handleUpdateQuantity(item.product._id, item.quantity + 1)}>+</button>
-                            <button onClick={() => handleRemoveFromCart(item.product._id)}>Remove</button>
+                            <button onClick={() => handleUpdateQuantity(item._id, item.quantity + 1)}>+</button>
+                            <button onClick={() => handleRemoveFromCart(item._id)}>Remove</button>
                         </div>
                     </div>
                 ))}

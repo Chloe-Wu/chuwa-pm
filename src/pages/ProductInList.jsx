@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react'
 import '../scripts/ProductInList.css';
+import { useDispatch, useSelector } from "react-redux";
 
-function ProductInList({ product, user }) {
+
+function ProductInList({ product, user, handleAddToCart }) {
     const [quantity, setQuantity] = useState(0);
 
     const decreaseQuantity = () => {
         if (quantity > 0) {
+
             setQuantity(quantity - 1);
         }
     };
 
     const increaseQuantity = () => {
+
+        handleAddToCart(product._id);
         setQuantity(quantity + 1);
     };
 
@@ -37,6 +42,7 @@ function ProductInList({ product, user }) {
                 >{quantity}</span>
                 <Button 
                     onClick={increaseQuantity}
+
                     colorScheme='teal'
                 >+</Button>
             </Flex>

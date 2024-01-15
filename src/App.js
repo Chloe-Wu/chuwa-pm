@@ -42,7 +42,7 @@ function App() {
           {/* <Route path="/main" element={<Main />}/> */}
           <Route path="/productList" element={<ProductList />} />
           <Route path="/updatePassword" element={<UpdatePassword />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/update-product/:id" element={<ManageProduct />} />

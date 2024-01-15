@@ -20,9 +20,12 @@ export default function Login(){
         // Successful login, navigate to the home/Product page
         console.log('Successful login');
         console.log(user.payload.id);
+        console.log(user.payload.token);
+
         dispatch(setCurrentUser(user.payload.id));
         dispatch(setCurrentToken(user.payload.token));
-        navigate('/product-detail');
+
+        navigate('/productList');
         
       } else {
         alert("Invalid username or password");

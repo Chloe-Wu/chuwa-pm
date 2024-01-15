@@ -91,11 +91,11 @@ export const addProduct = async (req, res) => {
     const user = await User.findById(req.body.userID);
     const cart = user.cart;
     // Prevent hack: check if product already exists in cart
-    if (cart && cart.some((item) => item.product.toString() === product.id)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Product already exists in cart" });
-    }
+    // if (cart && cart.some((item) => item.product.toString() === product.id)) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Product already exists in cart" });
+    // }
     // Add product into cart
     const target = { product: product.id, quantity: 1 };
     const status =
@@ -218,7 +218,6 @@ export const getUserCart = async (req, res) => {
       });
     }
     await user.save();
-    res.status(200).json({ success, cart: user.cart });
     res.status(200).json({ success, cart: user.cart });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });

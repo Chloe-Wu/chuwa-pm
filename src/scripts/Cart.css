@@ -1,0 +1,130 @@
+/* Cart.css */
+
+.cart-container {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+}
+
+.cart-header h2 {
+    margin: 0;
+}
+
+.cart-items {
+    padding: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.item-details h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.item-actions button {
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+.cart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+}
+
+.cart-footer p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.cart-footer button {
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.product-name {
+    margin: 0;
+    font-size: 16px;
+    color: #000; /* 设置商品名称文字颜色为黑色 */
+}
+
+.product-price {
+    margin: 0;
+    font-size: 16px;
+    color: #000; /* 设置商品价格文字颜色为黑色 */
+}
+
+.product-quantity {
+    font-size: 16px;
+    color: #000;
+    margin-left: auto; /* 将商品数量、按钮和删除按钮靠右对齐 */
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.item-actions button {
+    background-color: #605f5f; /* 设置按钮背景颜色 */
+    color: #fff; /* 设置按钮文字颜色 */
+    border: none;
+    cursor: pointer;
+    padding: 5px 7px;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+#exit{
+    color: whitesmoke;
+}

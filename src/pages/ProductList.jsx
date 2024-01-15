@@ -46,6 +46,7 @@ const ProductList = () => {
 
   };
 
+
   const handleSignOut = () => {
     console.log("logged out");
     localStorage.removeItem("user");

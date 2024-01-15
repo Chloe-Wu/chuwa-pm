@@ -4,6 +4,8 @@ import AuthForm from "../components/AuthForm/AuthForm";
 import { authUser } from '../slices/userSlice';
 import { setCurrentUser, setCurrentToken } from '../slices/userSlice';
 import { jwtDecode } from "jwt-decode";
+import Header from '../components/Framework/Header';
+import Footer from "../components/Framework/Footer";
 
 export default function Login(){
   const dispatch = useDispatch();
@@ -19,8 +21,10 @@ export default function Login(){
       if (user.payload.success) {
         // Successful login, navigate to the home/Product page
         console.log('Successful login');
-        console.log(user.payload.id);
-        console.log(user.payload.token);
+        // console.log('user',user);
+        // console.log(user.payload.id);
+        // console.log(user.payload.token);
+        // console.log(user.payload.admin);
 
         dispatch(setCurrentUser(user.payload.id));
         dispatch(setCurrentToken(user.payload.token));
@@ -37,7 +41,9 @@ export default function Login(){
 
     return (
     <div>
+      <Header/>
       <AuthForm onAuthSubmit={handleAuthSubmit} scenario="login"/>
+      <Footer/>
     </div>
   );
 

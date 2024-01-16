@@ -285,18 +285,8 @@ const ProductList = () => {
               <option value="price_high_to_low">Price: High to Low</option>
             </select>
           </>
-          <div className="create-product-mobie">
-              <Button
-                colorScheme="facebook"
-                onClick={() => {
-                  navigate("/create-product");
-                }}
-              >
-                Create Product
-              </Button>
-            </div>
           {isAdmin && (
-            <div className="create-product">
+            <div className="create-product-mobie">
               <Button
                 colorScheme="facebook"
                 onClick={() => {

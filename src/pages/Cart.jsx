@@ -24,16 +24,21 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                     console.log("Cart Data from API:", response.data);
                     const updatedCart = await Promise.all(response.data.cart.map(async (item) => {
 
-                        console.log("当前商品的id: " + item.product);
+
+
 
                         try {
                             const productDetails = await fetchProductDetails(item.product);
-                            console.log("This is product detail: "+productDetails);
-                            console.log("this is img link: " + productDetails.imageUrl);
+                            // console.log("当前商品的id: " + productDetails._id);
+                            // console.log("this is img link: " + productDetails.imageUrl);
+                            console.log("user has this items: "+item.quantity);
                             return {
                                 ...item,
+
                                 product: {
-                                    ...item.product,
+                                    productId: productDetails._id,
+
+
                                     name: productDetails.name,
                                     imageUrl: productDetails.imageUrl,
 
@@ -45,7 +50,9 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                             return {
                                 ...item,
                                 product: {
-                                    ...item.product,
+                                    productId: '0',
+
+
                                     name: '',
                                     imageUrl: '',
                                     price: 0  
@@ -70,7 +77,7 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
 
             if (response.data.success) {
 
-                console.log("Product details: " + response.data.product);
+                // console.log("Product details: " + response.data.product._id);
                 return response.data.product;
 
             }
@@ -88,22 +95,80 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
         setTotalPrice(total);
     };
 
-    const handleUpdateQuantity = (productId, newQuantity) => {
-        const updatedCart = cart.map((item) => {
-            if (item.product === productId) {
-                return { ...item, quantity: newQuantity };
+    const IncreaseProduct = async (productId) => {
+        try {
+
+
+
+            const response = await axios.post(`/api/user_increase_product/${productId}`, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${userToken}`
+                }
+            });
+
+            if (response.data.success) {
+
+
+                const updatedCart = cart.map((item) => {
+                    console.log("item product" + item.product);
+                    console.log("product ID" + productId);
+                    if (item.product.productId === productId) {
+                        console.log("商品成功添加");
+                        return { ...item, quantity: response.data.quantity };
+                    }
+                    return item;
+                });
+                setCart(updatedCart);
+                updateTotalPrice(updatedCart);
             }
-            return item;
-        });
-        setCart(updatedCart);
-        onUpdateCart(updatedCart);
+        } catch (error) {
+            console.error('Error increasing product quantity:', error);
+        }
+    };
+    const DecreaseProduct = async (productId) => {
+        try {
+            const response = await axios.post(`/api/user_decrease_product/${productId}`, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${userToken}`
+                }
+            });
+
+            if (response.data.success) {
+                console.log("shan chu cheng gong");
+                const updatedCart = cart.map((item) => {
+                    if (item.product.productId === productId) {
+                        return { ...item, quantity: response.data.quantity };
+                    }
+                    return item;
+                });
+                setCart(updatedCart);
+                updateTotalPrice(updatedCart);
+            }
+        } catch (error) {
+            console.error('Error decreasing product quantity:', error);
+        }
     };
 
-    const handleRemoveFromCart = (productId) => {
-        // Remove items from cart
-        const updatedCart = cart.filter((item) => item.product !== productId);
-        setCart(updatedCart);
-        onRemoveFromCart(productId, updatedCart);
+    const RemoveFromCart = async (productId) => {
+        try {
+            const response = await axios.delete(`/api/user_remove/${productId}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${userToken}`
+                }
+            });
+
+            if (response.data.success) {
+                console.log("removed success");
+                const updatedCart = cart.filter((item) => item.product.productId !== productId);
+                setCart(updatedCart);
+                updateTotalPrice(updatedCart);
+            }
+        } catch (error) {
+            console.error('Error removing product from cart:', error);
+        }
     };
 
 
@@ -115,9 +180,10 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
             </div>
             <div className="cart-items">
                 {cart.map((item) => (
-                    <div key={item.product} className="cart-item">
+                    <div key={item.productId} className="cart-item">
                         <div className="item-details">
-                            {console.log("Product Image URL:", item.imageUrl)}
+                            {/*{console.log("Product Image URL:", item.product.imageUrl)}*/}
+                            {console.log("Product IDDDDDD:", item.product.productId)}
                             <img src={item.product.imageUrl} alt={item.product.name} />
                             <div>
                                 <h3 className="product-name">{item.product.name}</h3>
@@ -127,14 +193,14 @@ const Cart = ({ userId, userToken, onClose, onUpdateCart, onRemoveFromCart, isOp
                         </div>
                         <div className="item-actions">
                             <button
-                                onClick={() => handleUpdateQuantity(item.product, item.quantity - 1)}
+                                onClick={() => DecreaseProduct(item.product.productId)}
                                 disabled={item.quantity === 1}
                             >
                                 -
                             </button>
                             <span className="product-quantity">{item.quantity}</span>
-                            <button onClick={() => handleUpdateQuantity(item.product, item.quantity + 1)}>+</button>
-                            <button onClick={() => handleRemoveFromCart(item.product)}>Remove</button>
+                            <button onClick={() => IncreaseProduct(item.product.productId)}>+</button>
+                            <button onClick={() => RemoveFromCart(item.product.productId)}>Remove</button>
                         </div>
                     </div>
                 ))}

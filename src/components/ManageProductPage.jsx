@@ -358,7 +358,7 @@ function ManageProductPage() {
 
         if (response.data.success) {
           console.log("Product updated!");
-          navigate(`/product-detail/${id}`);
+          navigate(`/product-list`);
         } else {
           console.log(
             "failed to update product data! The reason is: " +

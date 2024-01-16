@@ -28,7 +28,7 @@ const ProductList = () => {
   // const userId = useSelector(state => state.user.payload ? state.user.payload.id : null);
   // const userToken = useSelector(state => state.user.payload ? state.user.payload.token : null);
   const userId = useSelector((state) => (state.user ? state.user.id : null));
-  var userToken = useSelector((state) =>
+  const userToken = useSelector((state) =>
     state.user ? state.user.token : null
   );
   // console.log("the user id is " + userId);
@@ -39,16 +39,8 @@ const ProductList = () => {
 
   const isMobile = useMediaQuery("(max-width: 450px)");
 
-  const location = useLocation();
-  // console.log(user.email); // Access email
-  // console.log(user.admin); // Access admin status
-  // console.log(user.id);
-  // console.log(user.password);
+  // const page = localStorage.getItem("page");
 
-  // const user_token = useSelector((state) => state.user.token);
-  // const user_token =
-  //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjU4MTdkMjBiMTkyNmE5ZTVjMzQ3ZTUwIiwiYWRtaW4iOnRydWV9LCJpYXQiOjE3MDUyNzM0MjMsImV4cCI6MTcwNTM1OTgyM30.0vsnosASdIHQkc1TrtjyAhMnDLIABWRUnxaOWbSRxqw";
-  // // console.log(user_token)
 
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -65,12 +57,16 @@ const ProductList = () => {
   // };
 
   const handleSignOut = () => {
+    localStorage.setItem("page", 1);
     dispatch(logOutUser());
     setUser(null);
     navigate("/login");
   };
 
   const fetchProducts = async () => {
+
+    localStorage.setItem("page", currentPage);
+
     setLoading(true);
     try {
       let sortValue;
@@ -91,7 +87,7 @@ const ProductList = () => {
       const response = await axios.get("http://localhost:3000/api/products", {
         params: {
           sort_by: sortValue,
-          page: currentPage,
+          page: localStorage.getItem("page"),
           perPage: 10,
           search: searchTerm,
         },

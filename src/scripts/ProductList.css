@@ -2,7 +2,7 @@
 
 
 .top-bar {
-    background-color: black;
+    background-color: #111827;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -11,19 +11,34 @@
     height: 80px;
 }
 
+.top-bar-mobile {
+    background-color: #111827;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px;
+    height: 100px;
+}
+
 .logo {
     font-size: 24px;
     font-weight: bold;
-
+    margin-left: 38px;
 }
 
+.top-bar-mobile .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+}
 
 #search-box {
     display: flex;
     flex-grow: 1;
     margin-right: 200px;
     margin-left: 200px;
-
 }
 
 input[type="text"] {
@@ -63,6 +78,16 @@ button {
     margin-left: 200px;
     margin-right: 200px;
 }
+
+.product-grid-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: auto;
+    width: 90%;
+    align-items: center;
+}
+
 
 .product-card {
     background-color: white;
@@ -123,6 +148,7 @@ button {
 .user-buttons {
     display: flex;
     align-items: center;
+    margin-right: 20px;
 }
 
 .user-buttons button {
@@ -150,7 +176,22 @@ button {
     margin-bottom: 20px;
 }
 
+.sort-dropdown-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
 .sort-dropdown label {
+    color: white;
+    margin-right: 5px;
+}
+
+.sort-dropdown-mobile label {
     color: white;
     margin-right: 5px;
 }
@@ -166,12 +207,29 @@ button {
     cursor: pointer; /* 修改鼠标悬停效果 */
 }
 
+.sort-dropdown-mobile select {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    font-size: 120%; /* 增加字体大小 */
+    text-align: center; /* 居中对齐文本 */
+    background-color: #f0f0f0; /* 设置背景颜色 */
+    cursor: pointer; /* 修改鼠标悬停效果 */
+}
+
 /* 自定义下拉框悬停样式 */
 .sort-dropdown select:hover {
     background-color: #ccc; /* 悬停时的背景颜色 */
 }
 
-
-#cartbutton{
-    color: white;
+.create-product {
+    box-shadow: 0 0 5px 0 rgba(128, 127, 127, 0.2);
+    margin-left: 50px;
 }
+
+.create-product-mobie {
+    box-shadow: 0 0 5px 0 rgba(128, 127, 127, 0.2);
+    margin-top: 20px;
+}
+
